@@ -27,7 +27,7 @@ const lowerOutputToES5 = () => ({
 })
 
 export default defineConfig({
-  input: 'src/app.ts',
+  input: 'src/main.ts',
 
   output: {
     file: 'dist/script.js',
