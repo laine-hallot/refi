@@ -1,77 +1,77 @@
 export type BltOperation =
-    | 'EfiBltVideoFill'
-    | 'EfiBltVideoToBltBuffer'
-    | 'EfiBltBufferToVideo'
-    | 'EfiBltVideoToVideo';
+  | 'EfiBltVideoFill'
+  | 'EfiBltVideoToBltBuffer'
+  | 'EfiBltBufferToVideo'
+  | 'EfiBltVideoToVideo';
 
 export interface BltPixel {
-    r: number;
-    g: number;
-    b: number;
-    a?: number;
+  r: number;
+  g: number;
+  b: number;
+  a?: number;
 }
 
 export interface GraphicsOutputModeInfo {
-    HorizontalResolution: number;
-    VerticalResolution: number;
-    PixelsPerScanLine: number;
+  HorizontalResolution: number;
+  VerticalResolution: number;
+  PixelsPerScanLine: number;
 }
 
 export interface GraphicsOutputMode {
-    Info?: GraphicsOutputModeInfo;
-    Mode?: number;
-    MaxMode?: number;
+  Info?: GraphicsOutputModeInfo;
+  Mode?: number;
+  MaxMode?: number;
 }
 
 export interface GraphicsOutputProtocol {
-    Blt(
-        pixel: BltPixel,
-        operation: BltOperation,
-        sourceX: number,
-        sourceY: number,
-        destinationX: number,
-        destinationY: number,
-        width: number,
-        height: number,
-        delta: number
-    ): number;
-    Mode?: GraphicsOutputMode;
+  Blt(
+    pixel: BltPixel,
+    operation: BltOperation,
+    sourceX: number,
+    sourceY: number,
+    destinationX: number,
+    destinationY: number,
+    width: number,
+    height: number,
+    delta: number,
+  ): number;
+  Mode?: GraphicsOutputMode;
 }
 
 export interface BootServices {
-    LocateProtocol(guid: string): GraphicsOutputProtocol | null;
-    WaitForEvent(events: EfiEvent[]): number | null;
+  LocateProtocol(guid: string): GraphicsOutputProtocol | null;
+  WaitForEvent(events: EfiEvent[]): number | null;
 }
 
 export interface ConsoleOut {
-    OutputString(text: string): number;
-    ClearScreen(): number;
+  OutputString(text: string): number;
+  ClearScreen(): number;
 }
 
 export interface ConsoleIn {
-    ReadKeyStroke(): { scanCode: number; unicodeChar: number } | null;
-    WaitForKey(): EfiEvent | null;
+  ReadKeyStroke(): { scanCode: number; unicodeChar: number } | null;
+  WaitForKey(): EfiEvent | null;
 }
 
 export interface SystemTable {
-    BootServices: BootServices;
-    ConOut: ConsoleOut;
-    ConIn: ConsoleIn;
+  BootServices: BootServices;
+  ConOut: ConsoleOut;
+  ConIn: ConsoleIn;
 }
 
 export interface EfiGuid {
-    GraphicsOutput: string;
+  GraphicsOutput: string;
 }
 
 export interface Efi {
-    SystemTable: SystemTable;
-    guid: EfiGuid;
+  SystemTable: SystemTable;
+  guid: EfiGuid;
 }
 
 export type EfiEvent = unknown;
 
 declare global {
-    var efi: Efi;
-    function print(msg: string): void;
-    function println(msg: string): void;
+  var efi: Efi;
+  function print(msg: string): void;
+  function println(msg: string): void;
 }

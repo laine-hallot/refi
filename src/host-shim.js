@@ -1,13 +1,16 @@
 (function () {
-  var g = (typeof globalThis !== 'undefined') ? globalThis
-    : (typeof global !== 'undefined') ? global
-      : this;
+  var g =
+    typeof globalThis !== 'undefined'
+      ? globalThis
+      : typeof global !== 'undefined'
+        ? global
+        : this;
 
-  var _epoch = (typeof Date !== 'undefined' && Date.now) ? Date.now() : 0;
+  var _epoch = typeof Date !== 'undefined' && Date.now ? Date.now() : 0;
   var _mono = 0;
 
   function nowMs() {
-    var d = (Date && Date.now) ? Date.now() : _epoch;
+    var d = Date && Date.now ? Date.now() : _epoch;
     var delta = d - _epoch;
     if (delta > _mono) _mono = delta;
     return _mono;
@@ -23,7 +26,9 @@
   var _nextId = 1;
 
   if (typeof g.console.error !== 'function') {
-    g.console.error = function (e) { g.console.log('Error: ' + String(e)) };
+    g.console.error = function (e) {
+      g.console.log('Error: ' + String(e));
+    };
   }
 
   if (typeof g.setTimeout !== 'function') {
@@ -39,7 +44,10 @@
   if (typeof g.clearTimeout !== 'function') {
     g.clearTimeout = function (id) {
       for (var i = 0; i < _timers.length; i++) {
-        if (_timers[i].id === id) { _timers.splice(i, 1); return; }
+        if (_timers[i].id === id) {
+          _timers.splice(i, 1);
+          return;
+        }
       }
     };
   }
@@ -53,7 +61,9 @@
   }
 
   if (typeof g.setImmediate !== 'function') {
-    g.setImmediate = function (fn) { return g.setTimeout(fn, 0); };
+    g.setImmediate = function (fn) {
+      return g.setTimeout(fn, 0);
+    };
   }
   if (typeof g.clearImmediate !== 'function') {
     g.clearImmediate = g.clearTimeout;
@@ -61,7 +71,9 @@
 
   var _microtasks = [];
   if (typeof g.queueMicrotask !== 'function') {
-    g.queueMicrotask = function (fn) { _microtasks.push(fn); };
+    g.queueMicrotask = function (fn) {
+      _microtasks.push(fn);
+    };
   }
 
   g.__host = {

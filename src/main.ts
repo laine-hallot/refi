@@ -1,8 +1,8 @@
-import './host-shim.js'
+import './host-shim.js';
 //import './smoke.js'
 
-import React from 'react'
-import ReactReconciler, { HostConfig } from 'react-reconciler'
+import React from 'react';
+import ReactReconciler, { HostConfig } from 'react-reconciler';
 import {
   DiscreteEventPriority,
   ContinuousEventPriority,
@@ -37,7 +37,7 @@ const hostConfig = {
   },
   createTextInstance(text) {
     //console.log('createTextInstance')
-    throw new Error('Text must be enclosed in Text component')
+    throw new Error('Text must be enclosed in Text component');
   },
   appendInitialChild(parent, child) {
     parent.children.push(child);
@@ -137,14 +137,24 @@ const hostConfig = {
     //console.log('waitForCommitToBeReady')
     return null;
   },
-  setCurrentUpdatePriority(newPriority) {
-  },
+  setCurrentUpdatePriority(newPriority) {},
   getCurrentUpdatePriority() {
-    return DefaultEventPriority
+    return DefaultEventPriority;
   },
   supportsHydration: false,
-  cloneInstance(instance, type, oldProps, newProps, keepChildren, recyclableInstance) {
-    return { type, props: { ...oldProps, ...newProps }, children: keepChildren ? instance.children : [] };
+  cloneInstance(
+    instance,
+    type,
+    oldProps,
+    newProps,
+    keepChildren,
+    recyclableInstance,
+  ) {
+    return {
+      type,
+      props: { ...oldProps, ...newProps },
+      children: keepChildren ? instance.children : [],
+    };
   },
   createContainerChildSet(container) {
     //console.log('createContainerChildSet');
@@ -165,13 +175,13 @@ const hostConfig = {
     return instance;
   },
   cloneHiddenTextInstance(instance, type, internalInstanceHandle) {
-    throw new Error("Tried to clone unsupported element")
+    throw new Error('Tried to clone unsupported element');
   },
 } satisfies BetterHostConfig<
   HostConfig<
     ElementTypes,
     BaseProps,
-    { type: 'root', children: Element[] },
+    { type: 'root'; children: Element[] },
     Element,
     never,
     never,
@@ -187,21 +197,32 @@ const hostConfig = {
 >;
 const reconciler = ReactReconciler(hostConfig);
 
-const container = { type: 'root' as const, children: [] }
-const root = reconciler.createContainer(container, 0, null, false, null, '', (e) => {
-  console.error(e)
-}, null, (error) => {
-  console.error(error);
-}, () => { })
-reconciler.updateContainer(React.createElement(App), root, null, null)
+const container = { type: 'root' as const, children: [] };
+const root = reconciler.createContainer(
+  container,
+  0,
+  null,
+  false,
+  null,
+  '',
+  (e) => {
+    console.error(e);
+  },
+  null,
+  (error) => {
+    console.error(error);
+  },
+  () => {},
+);
+reconciler.updateContainer(React.createElement(App), root, null, null);
 
-let iters = 0
+let iters = 0;
 try {
   while (__host.hasWork()) {
-    __host.tick()
+    __host.tick();
   }
 } catch (e) {
-  console.log('error on iteration: ' + iters)
+  console.log('error on iteration: ' + iters);
   console.log(e);
 }
-console.log('done after ' + iters + ' iterations')
+console.log('done after ' + iters + ' iterations');

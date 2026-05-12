@@ -1,7 +1,7 @@
-import type ReactReconciler from "react-reconciler";
+import type ReactReconciler from 'react-reconciler';
 
-
-type OriginalHostConfig<Type,
+type OriginalHostConfig<
+  Type,
   Props,
   Container,
   Instance,
@@ -14,21 +14,23 @@ type OriginalHostConfig<Type,
   ChildSet,
   TimeoutHandle,
   NoTimeout,
-  TransitionStatus> = ReactReconciler.HostConfig<
-    Type,
-    Props,
-    Container,
-    Instance,
-    TextInstance,
-    SuspenseInstance,
-    HydratableInstance,
-    FormInstance,
-    PublicInstance,
-    HostContext,
-    ChildSet,
-    TimeoutHandle,
-    NoTimeout,
-    TransitionStatus>;
+  TransitionStatus,
+> = ReactReconciler.HostConfig<
+  Type,
+  Props,
+  Container,
+  Instance,
+  TextInstance,
+  SuspenseInstance,
+  HydratableInstance,
+  FormInstance,
+  PublicInstance,
+  HostContext,
+  ChildSet,
+  TimeoutHandle,
+  NoTimeout,
+  TransitionStatus
+>;
 
 type MutationMethods<
   T extends OriginalHostConfig<
@@ -46,8 +48,9 @@ type MutationMethods<
     unknown,
     unknown,
     unknown
-  >
-> = { supportsMutation: true } & Pick<T,
+  >,
+> = { supportsMutation: true } & Pick<
+  T,
   | 'supportsMutation'
   | 'appendChild'
   | 'appendChildToContainer'
@@ -82,8 +85,9 @@ type PersistanceMethods<
     unknown,
     unknown,
     unknown
-  >
-> = { supportsPersistence: true } & Pick<T,
+  >,
+> = { supportsPersistence: true } & Pick<
+  T,
   | 'supportsPersistence'
   | 'cloneInstance'
   | 'createContainerChildSet'
@@ -110,8 +114,9 @@ type HydrationMethods<
     unknown,
     unknown,
     unknown
-  >
-> = { supportsHydration: true } & Pick<T,
+  >,
+> = { supportsHydration: true } & Pick<
+  T,
   | 'supportsHydration'
   | 'canHydrateInstance'
   | 'canHydrateTextInstance'
@@ -141,46 +146,50 @@ type HydrationMethods<
   | 'errorHydratingContainer'
 >;
 
-type BaseMethods<T extends OriginalHostConfig<
-  unknown,
-  unknown,
-  unknown,
-  unknown,
-  unknown,
-  unknown,
-  unknown,
-  unknown,
-  unknown,
-  unknown,
-  unknown,
-  unknown,
-  unknown,
-  unknown
->> = Omit<T,
+type BaseMethods<
+  T extends OriginalHostConfig<
+    unknown,
+    unknown,
+    unknown,
+    unknown,
+    unknown,
+    unknown,
+    unknown,
+    unknown,
+    unknown,
+    unknown,
+    unknown,
+    unknown,
+    unknown,
+    unknown
+  >,
+> = Omit<
+  T,
   | keyof PersistanceMethods<T>
   | keyof MutationMethods<T>
   | keyof HydrationMethods<T>
 >;
-export type BetterHostConfig<T extends OriginalHostConfig<
-  unknown,
-  unknown,
-  unknown,
-  unknown,
-  unknown,
-  unknown,
-  unknown,
-  unknown,
-  unknown,
-  unknown,
-  unknown,
-  unknown,
-  unknown,
-  unknown
->> =
-  BaseMethods<T>
-  & (Required<MutationMethods<T>> | { supportsMutation: false })
-  & (Required<PersistanceMethods<T>> | { supportsPersistence: false })
-  & (Required<HydrationMethods<T>> | ({ supportsHydration: false }));
+export type BetterHostConfig<
+  T extends OriginalHostConfig<
+    unknown,
+    unknown,
+    unknown,
+    unknown,
+    unknown,
+    unknown,
+    unknown,
+    unknown,
+    unknown,
+    unknown,
+    unknown,
+    unknown,
+    unknown,
+    unknown
+  >,
+> = BaseMethods<T> &
+  (Required<MutationMethods<T>> | { supportsMutation: false }) &
+  (Required<PersistanceMethods<T>> | { supportsPersistence: false }) &
+  (Required<HydrationMethods<T>> | { supportsHydration: false });
 
 // declare module 'react-reconciler' {
 //   namespace ReactReconciler {

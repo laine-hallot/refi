@@ -1,30 +1,33 @@
-import { defineConfig } from 'rolldown'
-import babel from '@rolldown/plugin-babel'
-import { transformAsync } from '@babel/core'
+import { defineConfig } from 'rolldown';
+import babel from '@rolldown/plugin-babel';
+import { transformAsync } from '@babel/core';
 
 const lowerOutputToES5 = () => ({
   name: 'lower-output-to-es5',
   async renderChunk(code, chunk) {
-    if (!chunk.fileName.endsWith('.js')) return null
+    if (!chunk.fileName.endsWith('.js')) return null;
     const result = await transformAsync(code, {
       babelrc: false,
       configFile: false,
       sourceType: 'script',
       compact: false,
       presets: [
-        ['@babel/preset-env', {
-          targets: { ie: '11' },
-          modules: false,
-          useBuiltIns: false,
-          bugfixes: true,
-          shippedProposals: true,
-          exclude: ['transform-typeof-symbol'],
-        }],
+        [
+          '@babel/preset-env',
+          {
+            targets: { ie: '11' },
+            modules: false,
+            useBuiltIns: false,
+            bugfixes: true,
+            shippedProposals: true,
+            exclude: ['transform-typeof-symbol'],
+          },
+        ],
       ],
-    })
-    return result ? { code: result.code, map: result.map } : null
-  }
-})
+    });
+    return result ? { code: result.code, map: result.map } : null;
+  },
+});
 
 export default defineConfig({
   input: 'src/main.ts',
@@ -40,8 +43,8 @@ export default defineConfig({
   define: {
     'process.env.NODE_ENV': JSON.stringify('production'),
     'process.env': '({})',
-    'process': '({ env: {} })',
-    '__DEV__': 'false',
+    process: '({ env: {} })',
+    __DEV__: 'false',
   },
   plugins: [
     babel({
@@ -51,24 +54,24 @@ export default defineConfig({
         /node_modules\/react-reconciler\//,
         /node_modules\/scheduler\//,
       ],
-      exclude: [
-        /\0rolldown/,
-        /\.json$/,
-      ],
+      exclude: [/\0rolldown/, /\.json$/],
       babelrc: false,
       configFile: false,
       presets: [
         '@babel/preset-react',
-        ['@babel/preset-env', {
-          targets: { ie: '11' },
-          useBuiltIns: 'usage',
-          corejs: { version: 3, proposals: false },
-          modules: false,
-          exclude: ['transform-typeof-symbol'],
-        }],
+        [
+          '@babel/preset-env',
+          {
+            targets: { ie: '11' },
+            useBuiltIns: 'usage',
+            corejs: { version: 3, proposals: false },
+            modules: false,
+            exclude: ['transform-typeof-symbol'],
+          },
+        ],
       ],
     }),
 
     lowerOutputToES5(),
   ],
-})
+});

@@ -96,7 +96,7 @@ declare module Duktape {
    * @param format A format (Currently supported are "hex", "base64", "jx" and "jc")
    * @param value The value to encode
    */
-  function enc(format: "hex" | "base64", value: any): string;
+  function enc(format: 'hex' | 'base64', value: any): string;
 
   /**
    * Encodes its argument value into chosen format.
@@ -105,14 +105,19 @@ declare module Duktape {
    * @param replacer A function that alters the behavior of the stringification process
    * @param space A string or number object used to insert white space
    */
-  function enc(format: "jx" | "jc", value: any, replacer?: Function, space?: number): string;
+  function enc(
+    format: 'jx' | 'jc',
+    value: any,
+    replacer?: Function,
+    space?: number,
+  ): string;
 
   /**
    * Provides the revers function of enc()
    * @param format A format (Currently supported are "hex", "base64", "jx" and "jc")
    * @param value The value to decode
    */
-  function dec(format: "hex" | "base64", value: string): any;
+  function dec(format: 'hex' | 'base64', value: string): any;
 
   /**
    * Provides the revers function of enc()
@@ -120,7 +125,7 @@ declare module Duktape {
    * @param value The value to decode
    * @param reviver A function prescribes how the value originally produced by parsing is transformed
    */
-  function dec(format: "jx" | "jc", value: string, reviver?: Function): any;
+  function dec(format: 'jx' | 'jc', value: string, reviver?: Function): any;
 
   /**
    * Returns an object exposing internal information related to its argument value.
@@ -163,17 +168,16 @@ declare module Duktape {
 
   interface PointerConstructor {
     readonly prototype: Pointer;
-    new(pointer: any): Pointer;
+    new (pointer: any): Pointer;
     (pointer: any): any;
   }
   const Pointer: PointerConstructor;
 
-  interface Thread {
-  }
+  interface Thread {}
 
   interface ThreadConstructor {
     readonly prototype: Thread;
-    new(fn: Function): Thread;
+    new (fn: Function): Thread;
     (fn: Function): Thread;
 
     /**
@@ -282,11 +286,23 @@ declare var Proxy: ProxyConstructor;
 
 declare namespace Reflect {
   function get(target: object, key: string, receiver?: any): any;
-  function set(target: object, key: string, value: any, receiver?: any): boolean;
+  function set(
+    target: object,
+    key: string,
+    value: any,
+    receiver?: any,
+  ): boolean;
   function has(target: object, key: string): boolean;
   function deleteProperty(target: object, key: string): boolean;
-  function getOwnPropertyDescriptor(target: object, key: string): PropertyDescriptor;
-  function defineProperty(target: object, key: string, desc: PropertyDescriptor): boolean;
+  function getOwnPropertyDescriptor(
+    target: object,
+    key: string,
+  ): PropertyDescriptor;
+  function defineProperty(
+    target: object,
+    key: string,
+    desc: PropertyDescriptor,
+  ): boolean;
   function getPrototypeOf(target: object): object;
   function setPrototypeOf(target: object, proto: any): boolean;
   function isExtensible(target: object): boolean;
@@ -569,7 +585,12 @@ interface Buffer extends Uint8Array {
    * @param noAssert Skip value and offset validation
    * @return offset plus number of bytes written
    */
-  writeUIntBE(value: number, offset: number, byteLength: number, noAssert?: boolean): number;
+  writeUIntBE(
+    value: number,
+    offset: number,
+    byteLength: number,
+    noAssert?: boolean,
+  ): number;
 
   /**
    * Writes byteLength bytes of unsigned value to buf at the specified offset with little-endian format (Up to 48 bits accuracy)
@@ -579,7 +600,12 @@ interface Buffer extends Uint8Array {
    * @param noAssert Skip value and offset validation
    * @return offset plus number of bytes written
    */
-  writeUIntLE(value: number, offset: number, byteLength: number, noAssert?: boolean): number;
+  writeUIntLE(
+    value: number,
+    offset: number,
+    byteLength: number,
+    noAssert?: boolean,
+  ): number;
 
   /**
    * Writes byteLength bytes of signed value to buf at the specified offset with big-endian format (Up to 48 bits accuracy)
@@ -589,7 +615,12 @@ interface Buffer extends Uint8Array {
    * @param noAssert Skip value and offset validation
    * @return offset plus number of bytes written
    */
-  writeIntBE(value: number, offset: number, byteLength: number, noAssert?: boolean): number;
+  writeIntBE(
+    value: number,
+    offset: number,
+    byteLength: number,
+    noAssert?: boolean,
+  ): number;
 
   /**
    * Writes byteLength bytes of signed value to buf at the specified offset with little-endian format (Up to 48 bits accuracy)
@@ -599,7 +630,12 @@ interface Buffer extends Uint8Array {
    * @param noAssert Skip value and offset validation
    * @return offset plus number of bytes written
    */
-  writeIntLE(value: number, offset: number, byteLength: number, noAssert?: boolean): number;
+  writeIntLE(
+    value: number,
+    offset: number,
+    byteLength: number,
+    noAssert?: boolean,
+  ): number;
 
   /**
    * Returns a JSON representation of buf
@@ -622,7 +658,13 @@ interface Buffer extends Uint8Array {
    * @param sourceEnd The offset within buf at which to end comparison (not inclusive)
    * @return 0: target is the same as buf, 1: target should come before buf when sorted, -1: target should come after buf when sorted
    */
-  compare(target: Buffer, targetStart?: number, targetEnd?: number, sourceStart?: number, sourceEnd?: number): number;
+  compare(
+    target: Buffer,
+    targetStart?: number,
+    targetEnd?: number,
+    sourceStart?: number,
+    sourceEnd?: number,
+  ): number;
 
   /**
    * Copies data from a region of buf to a region in target even if the target memory region overlaps with buf
@@ -632,7 +674,12 @@ interface Buffer extends Uint8Array {
    * @param sourceEnd The offset within buf at which to stop copying (not inclusive)
    * @return The number of bytes copied
    */
-  copy(target: Buffer, targetStart?: number, sourceStart?: number, sourceEnd?: number): number;
+  copy(
+    target: Buffer,
+    targetStart?: number,
+    sourceStart?: number,
+    sourceEnd?: number,
+  ): number;
 
   /**
    * Returns a new Buffer that references the same memory as the original,
@@ -650,7 +697,12 @@ interface Buffer extends Uint8Array {
    * @param encoding The character encoding of string (only "utf8" is accepted in Duktape)
    * @return Number of bytes written
    */
-  write(string: string, offset?: number, length?: number, encoding?: string): number;
+  write(
+    string: string,
+    offset?: number,
+    length?: number,
+    encoding?: string,
+  ): number;
 }
 
 interface BufferConstructor {
@@ -660,20 +712,20 @@ interface BufferConstructor {
    * Allocates a new buffer using an array of octets.
    * @param array The octets to store
    */
-  new(array: Uint8Array): Buffer;
+  new (array: Uint8Array): Buffer;
 
   /**
    * Copies the passed buffer data onto a new Buffer instance.
    * @param buffer The buffer to copy
    */
-  new(buffer: Buffer): Buffer;
+  new (buffer: Buffer): Buffer;
 
   /**
    * Allocates a new buffer containing the given string
    * @param str String to encode
    * @param encoding Encoding to use (optional)
    */
-  new(str: string, encoding?: string): Buffer;
+  new (str: string, encoding?: string): Buffer;
 
   /**
    * Returns true if the encoding is a valid encoding argument, or false otherwise.
@@ -718,12 +770,12 @@ interface BufferConstructor {
 declare const Buffer: BufferConstructor;
 
 interface TextEncoder {
-  readonly encoding: "utf-8";
+  readonly encoding: 'utf-8';
   encode(input?: string): Uint8Array;
 }
 
 interface TextEncoderConstructor {
-  new(): TextEncoder;
+  new (): TextEncoder;
 }
 
 /**
@@ -742,7 +794,7 @@ interface TextDecodeOptions {
 }
 
 interface TextDecoder {
-  readonly encoding: "utf-8";
+  readonly encoding: 'utf-8';
   readonly fatal: boolean;
   readonly ignoreBOM: boolean;
   decode(input?: ArrayBufferView | ArrayBuffer, options?: TextDecodeOptions);
@@ -750,7 +802,7 @@ interface TextDecoder {
 
 interface TextDecoderConstructor {
   readonly prototype: TextDecoder;
-  new(label?: "utf-8", options?: TextDecoderOptions): TextDecoder;
+  new (label?: 'utf-8', options?: TextDecoderOptions): TextDecoder;
 }
 
 /**
