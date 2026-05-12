@@ -47,7 +47,8 @@ type MutationMethods<
     unknown,
     unknown
   >
-> = Pick<T,
+> = { supportsMutation: true } & Pick<T,
+  | 'supportsMutation'
   | 'appendChild'
   | 'appendChildToContainer'
   | 'insertBefore'
@@ -82,7 +83,8 @@ type PersistanceMethods<
     unknown,
     unknown
   >
-> = Pick<T,
+> = { supportsPersistence: true } & Pick<T,
+  | 'supportsPersistence'
   | 'cloneInstance'
   | 'createContainerChildSet'
   | 'appendChildToContainerChildSet'
@@ -109,7 +111,8 @@ type HydrationMethods<
     unknown,
     unknown
   >
-> = Pick<T,
+> = { supportsHydration: true } & Pick<T,
+  | 'supportsHydration'
   | 'canHydrateInstance'
   | 'canHydrateTextInstance'
   | 'canHydrateSuspenseInstance'
@@ -157,10 +160,7 @@ type BaseMethods<T extends OriginalHostConfig<
   | keyof PersistanceMethods<T>
   | keyof MutationMethods<T>
   | keyof HydrationMethods<T>
-  | 'supportsMutation'
-  | 'supportsHydration'
 >;
-
 export type BetterHostConfig<T extends OriginalHostConfig<
   unknown,
   unknown,
@@ -178,39 +178,40 @@ export type BetterHostConfig<T extends OriginalHostConfig<
   unknown
 >> =
   BaseMethods<T>
-  & ({ supportsMutation: true, supportsPersistence: false, } & Required<MutationMethods<T>>) | ({ supportsMutation: false, supportsPersistence: true } & Required<PersistanceMethods<T>>)
-  & ({ supportsHydration: true } & Required<HydrationMethods<T>>) | ({ supportsHydration: false });
+  & (Required<MutationMethods<T>> | { supportsMutation: false })
+  & (Required<PersistanceMethods<T>> | { supportsPersistence: false })
+  & (Required<HydrationMethods<T>> | ({ supportsHydration: false }));
 
-declare module 'react-reconciler' {
-  namespace ReactReconciler {
-    type HostConfig<Type,
-      Props,
-      Container,
-      Instance,
-      TextInstance,
-      SuspenseInstance,
-      HydratableInstance,
-      FormInstance,
-      PublicInstance,
-      HostContext,
-      ChildSet,
-      TimeoutHandle,
-      NoTimeout,
-      TransitionStatus,
-    > = BetterHostConfig<OriginalHostConfig<Type,
-      Props,
-      Container,
-      Instance,
-      TextInstance,
-      SuspenseInstance,
-      HydratableInstance,
-      FormInstance,
-      PublicInstance,
-      HostContext,
-      ChildSet,
-      TimeoutHandle,
-      NoTimeout,
-      TransitionStatus
-    >>;
-  }
-}
+// declare module 'react-reconciler' {
+//   namespace ReactReconciler {
+//     type HostConfig<Type,
+//       Props,
+//       Container,
+//       Instance,
+//       TextInstance,
+//       SuspenseInstance,
+//       HydratableInstance,
+//       FormInstance,
+//       PublicInstance,
+//       HostContext,
+//       ChildSet,
+//       TimeoutHandle,
+//       NoTimeout,
+//       TransitionStatus,
+//     > = BetterHostConfig<OriginalHostConfig<Type,
+//       Props,
+//       Container,
+//       Instance,
+//       TextInstance,
+//       SuspenseInstance,
+//       HydratableInstance,
+//       FormInstance,
+//       PublicInstance,
+//       HostContext,
+//       ChildSet,
+//       TimeoutHandle,
+//       NoTimeout,
+//       TransitionStatus
+//     >>;
+//   }
+// }

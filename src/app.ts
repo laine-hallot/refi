@@ -2,49 +2,25 @@ import './host-shim.js'
 //import './smoke.js'
 
 import React from 'react'
-import ReactReconciler from 'react-reconciler'
+import ReactReconciler, { HostConfig } from 'react-reconciler'
 import {
   DiscreteEventPriority,
   ContinuousEventPriority,
   DefaultEventPriority,
 } from 'react-reconciler/constants';
+import { BetterHostConfig } from '../reconciler-type.js';
+import { App } from './App.js';
 
 type BaseProps = {};
 type BoxElement = { type: 'box', props: BaseProps, children: Element[] };
-type TextElement = { type: 'styled-text', props: BaseProps, children: Element[] };
-type TextLiteral = { type: 'text', text: string };
-type Element = BoxElement | TextElement | TextLiteral;
+type TextElement = { type: 'text', props: BaseProps, children: Element[] };
+//type TextLiteral = { type: 'text', text: string };
+type Element = BoxElement | TextElement;
 type ElementTypes = Element['type'];
 
-const reconciler = ReactReconciler<
-  ElementTypes,
-  BaseProps,
-  { type: 'root', children: Element[] },
-  Element,
-  Extract<Element, { type: 'text' }>,
-  never,
-  never,
-  unknown,
-  unknown,
-  unknown,
-  unknown,
-  unknown,
-  unknown,
-  unknown
->({
-  supportsMutation: true,
-  supportsPersistence: false,
-  supportsHydration: false,
-  getCurrentUpdatePriority() {
-    //console.log('getCurrentUpdatePriority');
-    return DefaultEventPriority;
-  },
-  setCurrentUpdatePriority() {
-    //console.log('setCurrentUpdatePriority');
-  },
-  // getSuspendedCommitReason() {
-  //   console.log('startSuspendingCommit')
-  // },
+const hostConfig = {
+  supportsMutation: false as const,
+  supportsPersistence: true as const,
   startSuspendingCommit() {
     //console.log('startSuspendingCommit');
   },
@@ -59,7 +35,6 @@ const reconciler = ReactReconciler<
     //console.log('createInstance', type);
     switch (type) {
       case 'text':
-        return { type, props, text: "" };
       case 'box':
       default:
         return { type, props, children: [] };
@@ -67,72 +42,10 @@ const reconciler = ReactReconciler<
   },
   createTextInstance(text) {
     //console.log('createTextInstance')
-    return { type: 'text', props: {}, text };
-  },
-  commitTextUpdate(textInstnce, oldText, newText) {
-    //console.log('commitTextUpdate')
-    textInstnce.text = newText;
+    throw new Error('Text must be enclosed in Text component')
   },
   appendInitialChild(parent, child) {
-    //console.log('appendInitialChild');
-    if (parent.type === 'text') {
-      if (typeof child === 'string' || typeof child === 'boolean' || typeof child === 'number') {
-        parent.text = child;
-      } else {
-        throw Error('<text/> Can not take children');
-      }
-    } else {
-      parent.children.push(child);
-    }
-  },
-  appendChild(parent, child) {
-    //console.log('appendChild')
-    if (parent.type === 'text') {
-      if (typeof child === 'string' || typeof child === 'boolean' || typeof child === 'number') {
-        parent.text = String(child);
-      } else {
-        throw Error('appendChild - <text/> Can not take children');
-      }
-    } else {
-      parent.children.push(child);
-    }
-  },
-  appendChildToContainer(container, child) {
-    //console.log('appendChildToContainer')
-    container.children.push(child);
-  },
-  removeChild(parent, child) {
-    //console.log('removeChild')
-    if (parent.type === 'text') {
-      parent.text = '';
-    } else {
-      const i = parent.children.indexOf(child);
-      if (i >= 0) parent.children.splice(i, 1);
-    }
-  },
-  removeChildFromContainer(container, child) {
-    //console.log('removeChildFromContainer')
-    const i = container.children.indexOf(child);
-    if (i >= 0) container.children.splice(i, 1);
-  },
-  insertBefore(parent, child, before) {
-    //console.log('insertBefore');
-    if (parent.type === 'text') {
-      throw Error('<text/> Can not take children');
-    }
-    const i = parent.children.indexOf(before);
-    parent.children.splice(i, 0, child);
-  },
-  insertInContainerBefore(c, child, before) {
-    //console.log('insertInContainerBefore');
-    const i = c.children.indexOf(before);
-    c.children.splice(i, 0, child);
-  },
-  commitUpdate(instance, _payload, type, prev, next) {
-    //console.log('commitUpdate', type)
-    if (instance.type !== 'text') {
-      instance.props = next;
-    }
+    parent.children = [child];
   },
   finalizeInitialChildren() {
     //efi.SystemTable.ConOut.ClearScreen();
@@ -162,16 +75,9 @@ const reconciler = ReactReconciler<
   resetAfterCommit() {
     //console.log('resetAfterCommit');
   },
-  clearContainer(c) {
-    //efi.SystemTable.ConOut.ClearScreen();
-    //console.log('clearContainer');
-    c.children = [];
-  },
-
   trackSchedulerEvent() {
     //console.log('trackSchedulerEvent')
   },
-
   scheduleTimeout: setTimeout,
   cancelTimeout: clearTimeout,
   noTimeout: -1,
@@ -207,11 +113,11 @@ const reconciler = ReactReconciler<
   },
   getInstanceFromScope(_scopeInstance) {
     //console.log('getInstanceFromScope')
-    throw Error('getInstanceFromScope - not implemented')
+    throw Error('getInstanceFromScope - not implemented');
   },
   NotPendingTransition: undefined,
   HostTransitionContext: undefined,
-  resetFormInstance: function (_form: unknown): void {
+  resetFormInstance(_form) {
     //console.log('resetFormInstance')
   },
   requestPostPaintCallback(_callback) {
@@ -219,7 +125,7 @@ const reconciler = ReactReconciler<
   },
   shouldAttemptEagerTransition() {
     //console.log('shouldAttemptEagerTransition');
-    return false
+    return false;
   },
   maySuspendCommit(type, props) {
     //console.log('maySuspendCommit');
@@ -234,23 +140,67 @@ const reconciler = ReactReconciler<
   },
   waitForCommitToBeReady() {
     //console.log('waitForCommitToBeReady')
-    return null
-  }
-});
-
-function App() {
-  console.log('App')
-  const [count, setCount] = React.useState(0)
-  React.useEffect(() => {
-    console.log('App - setting timeout')
-    const id = setTimeout(() => {
-      console.log('App - TIMEOUT COMPLETE');
-      setCount(c => c + 1)
-    }, 1000)
-    return () => clearTimeout(id)
-  })
-  return React.createElement('box', null, React.createElement('styled-text', null, 'tick ' + count))
-}
+    return null;
+  },
+  setCurrentUpdatePriority(newPriority) {
+  },
+  getCurrentUpdatePriority() {
+    return DefaultEventPriority
+  },
+  supportsHydration: false,
+  cloneInstance(instance, type, oldProps, newProps, keepChildren, recyclableInstance) {
+    return { type, props: { ...oldProps, ...newProps }, children: keepChildren ? instance.children : [] };
+  },
+  createContainerChildSet(container) {
+    console.log('createContainerChildSet');
+    // container.children = [];
+    return [];
+  },
+  appendChildToContainerChildSet(childSet, child) {
+    childSet.push(child);
+  },
+  finalizeContainerChildren(container, newChildren) {
+    // console.log('finalizeContainerChildren')
+    efi.SystemTable.ConOut.ClearScreen();
+    const renderChildren = (children: Element[]) => {
+      children.forEach((child) => {
+        if (child.type === 'text') {
+          efi.SystemTable.ConOut.OutputString(child.props.text);
+        } else {
+          renderChildren(child.children);
+        }
+      })
+    }
+    renderChildren(container.children);
+  },
+  replaceContainerChildren(container, newChildren) {
+    container.children = newChildren;
+  },
+  cloneHiddenInstance(instance, type, props, internalInstanceHandle) {
+    return instance;
+  },
+  cloneHiddenTextInstance(instance, type, internalInstanceHandle) {
+    throw new Error("Tried to clone unsupported element")
+  },
+} satisfies BetterHostConfig<
+  HostConfig<
+    ElementTypes,
+    BaseProps,
+    { type: 'root', children: Element[] },
+    Element,
+    never,
+    never,
+    never,
+    unknown,
+    unknown,
+    unknown,
+    Element[],
+    unknown,
+    unknown,
+    unknown
+  >
+>;
+const reconciler = ReactReconciler(hostConfig);
 
 const container = { type: 'root' as const, children: [] }
 const root = reconciler.createContainer(container, 0, null, false, null, '', (e) => {
