@@ -55,11 +55,10 @@ export default defineConfig({
         /\0rolldown/,
         /\.json$/,
       ],
-
       babelrc: false,
       configFile: false,
-
       presets: [
+        '@babel/preset-react',
         ['@babel/preset-env', {
           targets: { ie: '11' },
           useBuiltIns: 'usage',

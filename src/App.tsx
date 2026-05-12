@@ -10,5 +10,13 @@ export function App() {
     }, 1000)
     return () => clearTimeout(id)
   })
-  return React.createElement('box', null, React.createElement('text', { text: 'tick ' + count }))
+  return (
+    <box orientation="column" separator={true}>
+      <text text={'tick ' + count} />
+      <box separator={true}>
+        <text text="testing" />
+        <text text="hiiiiii" />
+      </box>
+    </box>
+  );
 }

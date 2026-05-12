@@ -4,6 +4,7 @@
     "moduleResolution": "bundler",
     "noEmit": true,
     "allowJs": true,
+    "jsx": "preserve",
     "lib": [
       "ES2015",
     ]

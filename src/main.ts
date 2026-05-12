@@ -10,13 +10,8 @@ import {
 } from 'react-reconciler/constants';
 import { BetterHostConfig } from '../reconciler-type.js';
 import { App } from './App.js';
-
-type BaseProps = {};
-type BoxElement = { type: 'box', props: BaseProps, children: Element[] };
-type TextElement = { type: 'text', props: BaseProps, children: Element[] };
-//type TextLiteral = { type: 'text', text: string };
-type Element = BoxElement | TextElement;
-type ElementTypes = Element['type'];
+import { BaseProps, Element, ElementTypes } from './types.js';
+import { render } from './render.js';
 
 const hostConfig = {
   supportsMutation: false as const,
@@ -45,7 +40,7 @@ const hostConfig = {
     throw new Error('Text must be enclosed in Text component')
   },
   appendInitialChild(parent, child) {
-    parent.children = [child];
+    parent.children.push(child);
   },
   finalizeInitialChildren() {
     //efi.SystemTable.ConOut.ClearScreen();
@@ -152,26 +147,16 @@ const hostConfig = {
     return { type, props: { ...oldProps, ...newProps }, children: keepChildren ? instance.children : [] };
   },
   createContainerChildSet(container) {
-    console.log('createContainerChildSet');
-    // container.children = [];
+    //console.log('createContainerChildSet');
     return [];
   },
   appendChildToContainerChildSet(childSet, child) {
+    console.log('appendChildToContainerChildSet');
     childSet.push(child);
   },
   finalizeContainerChildren(container, newChildren) {
     // console.log('finalizeContainerChildren')
-    efi.SystemTable.ConOut.ClearScreen();
-    const renderChildren = (children: Element[]) => {
-      children.forEach((child) => {
-        if (child.type === 'text') {
-          efi.SystemTable.ConOut.OutputString(child.props.text);
-        } else {
-          renderChildren(child.children);
-        }
-      })
-    }
-    renderChildren(container.children);
+    render(container);
   },
   replaceContainerChildren(container, newChildren) {
     container.children = newChildren;
