@@ -27,15 +27,20 @@
 
   if (typeof g.console.error !== 'function') {
     g.console.error = function (e) {
+      if (typeof e === 'object') {
+        g.console.log(
+          `Error(${e.lineNumber ?? '??'}:${e.columnNumber ?? '??'} in ${e.fileName ?? '??'}): ${String(e)}`,
+        );
+        if (e.stack !== undefined) {
+          g.console.log(e.stack);
+        }
+      }
       g.console.log('Error: ' + String(e));
     };
   }
 
   if (typeof g.setTimeout !== 'function') {
     g.setTimeout = function (fn, ms) {
-      //console.log('setTimeout: - timeout ' + ms)
-      //console.log("setTimeOut - nowMs(): " + nowMs())
-      //console.log("setTimeOut - Date.now(): " + Date.now())
       var id = _nextId++;
       _timers.push({ id: id, fn: fn, due: nowMs() + (ms | 0) });
       return id;
@@ -91,7 +96,6 @@
     },
 
     tick: function () {
-      //console.log('tick');
       var now = nowMs();
       // Pull due timers out first, in scheduling order.
       var ready = [];
@@ -102,8 +106,6 @@
         var idx = _timers.indexOf(ready[j]);
         if (idx >= 0) _timers.splice(idx, 1);
         try {
-          //console.log('calling timer function "' + ready[j].fn.name + '":');
-          //console.log('Callback exists: ' + String(ready[j].fn !== undefined))
           ready[j].fn();
         } catch (e) {
           console.log('error in timer callback "' + ready[j].fn.name + '":');
