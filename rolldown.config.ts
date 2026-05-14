@@ -2,33 +2,6 @@ import { defineConfig } from 'rolldown';
 import babel from '@rolldown/plugin-babel';
 import { transformAsync } from '@babel/core';
 
-const lowerOutputToES5 = () => ({
-  name: 'lower-output-to-es5',
-  async renderChunk(code, chunk) {
-    if (!chunk.fileName.endsWith('.js')) return null;
-    const result = await transformAsync(code, {
-      babelrc: false,
-      configFile: false,
-      sourceType: 'script',
-      compact: false,
-      presets: [
-        [
-          '@babel/preset-env',
-          {
-            targets: { ie: '11' },
-            modules: false,
-            useBuiltIns: false,
-            bugfixes: true,
-            shippedProposals: true,
-            exclude: ['transform-typeof-symbol'],
-          },
-        ],
-      ],
-    });
-    return result ? { code: result.code, map: result.map } : null;
-  },
-});
-
 export default defineConfig({
   input: 'src/main.ts',
 
@@ -55,8 +28,6 @@ export default defineConfig({
         /node_modules\/scheduler\//,
       ],
       exclude: [/\0rolldown/, /\.json$/],
-      babelrc: false,
-      configFile: false,
       presets: [
         '@babel/preset-react',
         [
@@ -71,7 +42,31 @@ export default defineConfig({
         ],
       ],
     }),
-
-    lowerOutputToES5(),
+    {
+      name: 'lower-output-to-es5',
+      renderChunk = async (code, chunk) => {
+        if (!chunk.fileName.endsWith('.js')) return null;
+        const result = await transformAsync(code, {
+          babelrc: false,
+          configFile: false,
+          sourceType: 'script',
+          compact: false,
+          presets: [
+            [
+              '@babel/preset-env',
+              {
+                targets: { ie: '11' },
+                modules: false,
+                useBuiltIns: false,
+                bugfixes: true,
+                shippedProposals: true,
+                exclude: ['transform-typeof-symbol'],
+              },
+            ],
+          ],
+        });
+        return result ? { code: result.code, map: result.map } : null;
+      },
+    },
   ],
 });
