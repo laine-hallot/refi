@@ -13,6 +13,8 @@ export function App() {
   return (
     <box orientation="column" separator={true}>
       <text text={'tick ' + count} />
+      <text text="Hiiiiiiiiiiiii" />
+      <text text="In terms of human pokemon relations, Vaporeon is the most compatible." />
       <box separator={true}>
         <text text="testing" />
         <text text="hiiiiii" />

@@ -27,12 +27,14 @@ const hostConfig = {
     //console.log('detachDeletedInstance', node.type);
   },
   createInstance(type, props) {
-    //console.log('createInstance', type);
+    //println('createInstance', type);
     switch (type) {
       case 'text':
+        return { type: 'text', props } as TextElement;
       case 'box':
+        return { type: 'box', props, children: [] } as BoxElement;
       default:
-        return { type, props, children: [] };
+        throw new Error('Unknown component: ' + type);
     }
   },
   createTextInstance(text) {
@@ -40,7 +42,10 @@ const hostConfig = {
     throw new Error('Text must be enclosed in Text component');
   },
   appendInitialChild(parent, child) {
-    parent.children.push(child);
+    //println('appendInitialChild');
+    if ('children' in parent) {
+      parent.children.push(child);
+    }
   },
   finalizeInitialChildren() {
     //efi.SystemTable.ConOut.ClearScreen();
@@ -150,11 +155,21 @@ const hostConfig = {
     keepChildren,
     recyclableInstance,
   ) {
-    return {
-      type,
-      props: { ...oldProps, ...newProps },
-      children: keepChildren ? instance.children : [],
-    };
+    return match(instance, 'type', {
+      text: (text) => {
+        return {
+          type,
+          props: { ...oldProps, ...newProps },
+        };
+      },
+      box: (box) => {
+        return {
+          type,
+          props: { ...oldProps, ...newProps },
+          children: keepChildren ? box.children : [],
+        };
+      },
+    });
   },
   createContainerChildSet(container) {
     //console.log('createContainerChildSet');
