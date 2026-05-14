@@ -797,7 +797,10 @@ interface TextDecoder {
   readonly encoding: 'utf-8';
   readonly fatal: boolean;
   readonly ignoreBOM: boolean;
-  decode(input?: ArrayBufferView | ArrayBuffer, options?: TextDecodeOptions);
+  decode(
+    input?: ArrayBufferView | ArrayBuffer,
+    options?: TextDecodeOptions,
+  ): string;
 }
 
 interface TextDecoderConstructor {

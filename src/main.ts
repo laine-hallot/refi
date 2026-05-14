@@ -2,29 +2,54 @@ import './host-shim.js';
 //import './smoke.js'
 
 import React from 'react';
-import ReactReconciler, { HostConfig } from 'react-reconciler';
+import ReactReconciler, { HostConfig, ReactContext } from 'react-reconciler';
 import {
   DiscreteEventPriority,
   ContinuousEventPriority,
   DefaultEventPriority,
 } from 'react-reconciler/constants';
-import { BetterHostConfig } from '../reconciler-type.js';
+import { BetterHostConfig } from '../uefi-react.js';
 import { App } from './App.js';
-import { BaseProps, Element, ElementTypes } from './types.js';
+import {
+  BoxElement,
+  Element,
+  ElementTypes,
+  RootContainer,
+  TextElement,
+} from './types.js';
 import { render } from './render.js';
+import { match } from 'match-discriminated-union';
 
-const hostConfig = {
+const hostContext = {};
+const hostTransitionContext: ReactContext<any> = {};
+
+const reconciler = ReactReconciler<
+  ElementTypes,
+  TextElement['props'] | BoxElement['props'],
+  RootContainer,
+  Element,
+  never,
+  never,
+  never,
+  unknown,
+  unknown,
+  typeof hostContext,
+  Element[],
+  unknown,
+  unknown,
+  typeof hostTransitionContext
+>({
   supportsMutation: false as const,
   supportsPersistence: true as const,
   startSuspendingCommit() {
-    //console.log('startSuspendingCommit');
+    //println('startSuspendingCommit');
   },
   resolveUpdatePriority() {
-    //console.log('resolveUpdatePriority');
+    //println('resolveUpdatePriority');
     return DefaultEventPriority;
   },
   detachDeletedInstance(node) {
-    //console.log('detachDeletedInstance', node.type);
+    //println('detachDeletedInstance', node.type);
   },
   createInstance(type, props) {
     //println('createInstance', type);
@@ -38,7 +63,7 @@ const hostConfig = {
     }
   },
   createTextInstance(text) {
-    //console.log('createTextInstance')
+    //println('createTextInstance')
     throw new Error('Text must be enclosed in Text component');
   },
   appendInitialChild(parent, child) {
@@ -49,34 +74,34 @@ const hostConfig = {
   },
   finalizeInitialChildren() {
     //efi.SystemTable.ConOut.ClearScreen();
-    //console.log('finalizeInitialChildren');
+    //println('finalizeInitialChildren');
     return false;
   },
   shouldSetTextContent() {
-    //console.log('shouldSetTextContent');
+    //println('shouldSetTextContent');
     return false;
   },
   getRootHostContext() {
-    //console.log('getRootHostContext');
+    //println('getRootHostContext');
     return {};
   },
   getChildHostContext() {
-    //console.log('getChildHostContext');
+    //println('getChildHostContext');
     return {};
   },
   getPublicInstance(i) {
-    //console.log('getPublicInstance');
+    //println('getPublicInstance');
     return i;
   },
   prepareForCommit() {
-    //console.log('prepareForCommit');
+    //println('prepareForCommit');
     return null;
   },
   resetAfterCommit() {
-    //console.log('resetAfterCommit');
+    //println('resetAfterCommit');
   },
   trackSchedulerEvent() {
-    //console.log('trackSchedulerEvent')
+    //println('trackSchedulerEvent')
   },
   scheduleTimeout: setTimeout,
   cancelTimeout: clearTimeout,
@@ -84,65 +109,65 @@ const hostConfig = {
   isPrimaryRenderer: true,
   supportsMicrotasks: true,
   scheduleMicrotask: (fn) => {
-    //console.log('scheduleMicrotask');
+    //println('scheduleMicrotask');
     queueMicrotask(fn);
   },
   resolveEventTimeStamp() {
-    //console.log('resolveEventTimeStamp');
+    //println('resolveEventTimeStamp');
     return performance.now();
   },
   resolveEventType() {
-    //console.log('resolveEventType');
+    //println('resolveEventType');
     return null;
   },
   preparePortalMount(containerInfo) {
-    //console.log('containerInfo')
+    //println('containerInfo')
   },
   getInstanceFromNode(node) {
-    //console.log('getInstanceFromNode')
+    //println('getInstanceFromNode')
     return null;
   },
   beforeActiveInstanceBlur() {
-    //console.log('beforeActiveInstanceBlur')
+    //println('beforeActiveInstanceBlur')
   },
   afterActiveInstanceBlur() {
-    //console.log('afterActiveInstanceBlur')
+    //println('afterActiveInstanceBlur')
   },
   prepareScopeUpdate(_scopeInstance, _instance) {
-    //console.log('prepareScopeUpdate')
+    //println('prepareScopeUpdate')
   },
   getInstanceFromScope(_scopeInstance) {
-    //console.log('getInstanceFromScope')
+    //println('getInstanceFromScope')
     throw Error('getInstanceFromScope - not implemented');
   },
-  NotPendingTransition: undefined,
-  HostTransitionContext: undefined,
+  NotPendingTransition: null,
+  HostTransitionContext: hostTransitionContext,
   resetFormInstance(_form) {
-    //console.log('resetFormInstance')
+    //println('resetFormInstance')
   },
   requestPostPaintCallback(_callback) {
-    //console.log('requestPostPaintCallback')
+    //println('requestPostPaintCallback')
   },
   shouldAttemptEagerTransition() {
-    //console.log('shouldAttemptEagerTransition');
+    //println('shouldAttemptEagerTransition');
     return false;
   },
   maySuspendCommit(type, props) {
-    //console.log('maySuspendCommit');
+    //println('maySuspendCommit');
     return false;
   },
   preloadInstance(type, props) {
-    //console.log('preloadInstance');
+    //println('preloadInstance');
     return false;
   },
   suspendInstance(type, props) {
-    //console.log('suspendInstance')
+    //println('suspendInstance')
   },
   waitForCommitToBeReady() {
-    //console.log('waitForCommitToBeReady')
+    //println('waitForCommitToBeReady')
     return null;
   },
-  setCurrentUpdatePriority(newPriority) {},
+  setCurrentUpdatePriority(newPriority) { },
   getCurrentUpdatePriority() {
     return DefaultEventPriority;
   },
@@ -172,15 +197,15 @@ const hostConfig = {
     });
   },
   createContainerChildSet(container) {
-    //console.log('createContainerChildSet');
+    //println('createContainerChildSet');
     return [];
   },
   appendChildToContainerChildSet(childSet, child) {
-    console.log('appendChildToContainerChildSet');
+    //println('appendChildToContainerChildSet');
     childSet.push(child);
   },
   finalizeContainerChildren(container, newChildren) {
-    // console.log('finalizeContainerChildren')
+    // println('finalizeContainerChildren')
     render(container);
   },
   replaceContainerChildren(container, newChildren) {
@@ -192,25 +217,7 @@ const hostConfig = {
   cloneHiddenTextInstance(instance, type, internalInstanceHandle) {
     throw new Error('Tried to clone unsupported element');
   },
-} satisfies BetterHostConfig<
-  HostConfig<
-    ElementTypes,
-    BaseProps,
-    { type: 'root'; children: Element[] },
-    Element,
-    never,
-    never,
-    never,
-    unknown,
-    unknown,
-    unknown,
-    Element[],
-    unknown,
-    unknown,
-    unknown
-  >
->;
-const reconciler = ReactReconciler(hostConfig);
+});
 
 const container = { type: 'root' as const, children: [] };
 const root = reconciler.createContainer(
@@ -226,8 +233,9 @@ const root = reconciler.createContainer(
   null,
   (error) => {
     console.error(error);
+    console.error(error.message);
   },
-  () => {},
+  () => { },
 );
 reconciler.updateContainer(React.createElement(App), root, null, null);
 
@@ -237,7 +245,7 @@ try {
     __host.tick();
   }
 } catch (e) {
-  console.log('error on iteration: ' + iters);
-  console.log(e);
+  println('error on iteration: ' + iters);
+  println(e);
 }
-console.log('done after ' + iters + ' iterations');
+println('done after ' + iters + ' iterations');

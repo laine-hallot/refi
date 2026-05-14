@@ -44,7 +44,7 @@ export default defineConfig({
     }),
     {
       name: 'lower-output-to-es5',
-      renderChunk = async (code, chunk) => {
+      renderChunk: async (code, chunk) => {
         if (!chunk.fileName.endsWith('.js')) return null;
         const result = await transformAsync(code, {
           babelrc: false,
@@ -67,6 +67,6 @@ export default defineConfig({
         });
         return result ? { code: result.code, map: result.map } : null;
       },
-    },
+    }
   ],
 });
