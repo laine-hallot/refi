@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 export function App() {
-  const [count, setCount] = React.useState(0);
-  React.useEffect(() => {
+  const [count, setCount] = useState(0);
+  useEffect(() => {
     //console.log('App - setting timeout')
     const id = setTimeout(() => {
       //console.log('App - TIMEOUT COMPLETE');
@@ -14,7 +14,7 @@ export function App() {
     <box orientation="column" separator={true}>
       <text text={'tick ' + count} />
       <text text="Hiiiiiiiiiiiii" />
-      <text text="In terms of human pokemon relations, Vaporeon is the most compatible." />
+      <text text="omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam." />
       <box separator={true}>
         <text text="testing" />
         <text text="hiiiiii" />
