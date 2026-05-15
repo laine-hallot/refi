@@ -19,6 +19,7 @@ import {
 } from './types.js';
 import { render } from './render.js';
 import { match } from 'match-discriminated-union';
+import { HII } from '../types.js';
 
 const hostContext = {};
 const hostTransitionContext: ReactContext<any> = {};
@@ -167,7 +168,7 @@ const reconciler = ReactReconciler<
     //println('waitForCommitToBeReady')
     return null;
   },
-  setCurrentUpdatePriority(newPriority) { },
+  setCurrentUpdatePriority(newPriority) {},
   getCurrentUpdatePriority() {
     return DefaultEventPriority;
   },
@@ -235,7 +236,7 @@ const root = reconciler.createContainer(
     console.error(error);
     console.error(error.message);
   },
-  () => { },
+  () => {},
 );
 reconciler.updateContainer(React.createElement(App), root, null, null);
 

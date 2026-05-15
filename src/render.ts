@@ -1,17 +1,8 @@
 import { match } from 'match-discriminated-union';
-import { BltOperation, BltPixel, GraphicsOutputProtocol } from '../types';
-import {
-  Element,
-  BoxElement,
-  TextElement,
-  ElementTypes,
-  RootContainer,
-} from './types';
-import { drawRectangle } from './uefi-graphics';
+import { BltPixel, HIIFont } from '../types';
+import { RootContainer } from './types';
+import { clearScreen, drawRectangle, drawText } from './uefi-graphics';
 import { calculateBox, createContainer, LayoutElement } from './layout';
-
-const HORIZONTAL_SEPARATOR = ' | ';
-const VERTICAL_SEPARATOR = '------------------------------';
 
 const colorOrder: BltPixel[] = [
   { r: 255, g: 0, b: 0, a: 255 },
@@ -63,11 +54,7 @@ const renderBox = (layout: LayoutElement): void => {
               text.component.type + ': ' + JSON.stringify(text.container),
             );
           } else {
-            drawRectangle(
-              colorOrderText[index] ?? colorOrderText[0],
-              { x: text.container.x, y: text.container.y },
-              { width: text.container.width, height: text.container.height },
-            );
+            drawText(text);
           }
         },
       });
@@ -76,7 +63,7 @@ const renderBox = (layout: LayoutElement): void => {
 };
 
 export const render = (container: RootContainer): void => {
-  efi.SystemTable.ConOut.ClearScreen();
+  clearScreen();
 
   container.children.forEach((child) => {
     match(child, 'type', {
@@ -97,5 +84,6 @@ export const render = (container: RootContainer): void => {
       },
     });
   });
+
   colorIndex = 0;
 };

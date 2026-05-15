@@ -67,6 +67,6 @@ export default defineConfig({
         });
         return result ? { code: result.code, map: result.map } : null;
       },
-    }
+    },
   ],
 });
