@@ -2,6 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { useGlobalKeyboard } from './hooks/global-keyboard';
 import { CharCodes, ScanCodes } from '../types';
 
+const Thing: React.FC<{}> = ({ }) => {
+  return (
+    <box orientation='row'>
+      <text text="Testing non-intrinsics" />
+    </box>
+  )
+}
+
 export function App() {
   const [count, setCount] = useState(0);
   useEffect(() => {
@@ -9,7 +17,7 @@ export function App() {
       {
         key: {
           scanCode: ScanCodes.ScanUp,
-          unicodeChar: CharCodes.CharNull
+          unicodeChar: CharCodes.CharNull,
         },
         keyState: { keyShiftState: 0, keyToggleState: 0 },
       },
@@ -21,7 +29,7 @@ export function App() {
       {
         key: {
           scanCode: ScanCodes.ScanDown,
-          unicodeChar: CharCodes.CharNull
+          unicodeChar: CharCodes.CharNull,
         },
         keyState: { keyShiftState: 0, keyToggleState: 0 },
       },
@@ -33,7 +41,7 @@ export function App() {
     return () => {
       unsubscribe();
       unsubscribeDown();
-    }
+    };
   }, []);
   useEffect(() => {
     //console.log('App - setting timeout')
@@ -48,6 +56,7 @@ export function App() {
       <text text={'tick ' + count} />
       <text text="Hiiiiiiiiiiiii" />
       <text text="omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam." />
+      <Thing />
       <box separator={true}>
         <text text="testing" />
         <text text="hiiiiii" />

@@ -14,5 +14,4 @@ export const useGlobalKeyboard = (
   }
   const handle = CON_EX.RegisterKeyNotify(options, onKeyPress);
   return { unsubscribe: () => CON_EX.UnregisterKeyNotify(handle) };
-
 };

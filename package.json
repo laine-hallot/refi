@@ -1,5 +1,5 @@
 {
-  "name": "react-app",
+  "name": "@refi/refi",
   "version": "0.1.0",
   "description": "",
   "main": "index.js",
@@ -30,5 +30,11 @@
     "prettier": "^3.8.3",
     "rolldown": "^1.0.0",
     "typescript": "^6.0.3"
-  }
+  },
+  "workspaces": [
+    "packages/layout-engine",
+    "packages/example",
+    "packages/uefi-react",
+    "packages/polyfills"
+  ]
 }

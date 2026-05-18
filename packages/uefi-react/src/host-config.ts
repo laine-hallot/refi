@@ -1,25 +1,3 @@
-import './host-shim.js';
-//import './smoke.js'
-
-import React from 'react';
-import ReactReconciler, { HostConfig, ReactContext } from 'react-reconciler';
-import {
-  DiscreteEventPriority,
-  ContinuousEventPriority,
-  DefaultEventPriority,
-} from 'react-reconciler/constants';
-import { BetterHostConfig } from '../uefi-react.js';
-import { App } from './App.js';
-import {
-  BoxElement,
-  Element,
-  ElementTypes,
-  RootContainer,
-  TextElement,
-} from './types.js';
-import { render } from './render.js';
-import { match } from 'match-discriminated-union';
-import { HII } from '../types.js';
 
 const hostContext = {};
 const hostTransitionContext: ReactContext<any> = {};
@@ -168,7 +146,7 @@ const reconciler = ReactReconciler<
     //println('waitForCommitToBeReady')
     return null;
   },
-  setCurrentUpdatePriority(newPriority) {},
+  setCurrentUpdatePriority(newPriority) { },
   getCurrentUpdatePriority() {
     return DefaultEventPriority;
   },
@@ -219,34 +197,3 @@ const reconciler = ReactReconciler<
     throw new Error('Tried to clone unsupported element');
   },
 });
-
-const container = { type: 'root' as const, children: [] };
-const root = reconciler.createContainer(
-  container,
-  0,
-  null,
-  false,
-  null,
-  '',
-  (e) => {
-    console.error(e);
-  },
-  null,
-  (error) => {
-    console.error(error);
-    console.error(error.message);
-  },
-  () => {},
-);
-reconciler.updateContainer(React.createElement(App), root, null, null);
-
-let iters = 0;
-try {
-  while (__host.hasWork()) {
-    __host.tick();
-  }
-} catch (e) {
-  println('error on iteration: ' + iters);
-  println(e);
-}
-println('done after ' + iters + ' iterations');

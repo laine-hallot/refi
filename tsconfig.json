@@ -6,13 +6,22 @@
     "noEmit": true,
     "allowJs": true,
     "jsx": "preserve",
-    "lib": ["ES2015"]
+    "lib": [
+      "ES2015"
+    ]
   },
-  "include": ["./src/"],
-  "files": [
-    "src/main.ts",
-    "./duktape.d.ts",
-    "./types.ts",
-    "./reconciler-type.ts"
-  ]
+  "references": [
+    {
+      "path": "./packages/example"
+    },
+    {
+      "path": "./packages/layout-engine"
+    },
+    {
+      "path": "./packages/polyfills"
+    },
+    {
+      "path": "./packages/uefi-react"
+    },
+  ],
 }

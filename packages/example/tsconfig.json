@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "composite": true,
+    "strict": true,
+    "module": "Preserve",
+    "moduleResolution": "bundler",
+    "allowJs": true,
+    "jsx": "preserve",
+    "lib": [
+      "ES2015"
+    ]
+  },
+  "include": [
+    "./src/"
+  ],
+  "files": [
+    "src/main.ts",
+  ]
+}

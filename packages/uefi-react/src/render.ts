@@ -1,8 +1,19 @@
 import { match } from 'match-discriminated-union';
 import { BltPixel, HIIFont } from '../types';
 import { RootContainer } from './types';
-import { clearScreen, drawRectangle, drawText } from './uefi-graphics';
-import { calculateBox, createContainer, LayoutElement } from './layout';
+import {
+  clearScreen,
+  drawRectangle,
+  drawText,
+  getScreenSize,
+} from './uefi-graphics';
+import {
+  calculateBox,
+  calculateElement,
+  calculateRoot,
+  createContainer,
+  LayoutElement,
+} from './layout';
 
 const colorOrder: BltPixel[] = [
   { r: 255, g: 0, b: 0, a: 255 },
@@ -20,17 +31,7 @@ const getColor = () => {
   return color;
 };
 
-// const drawText = () => {
-//   let text_width = child.props.text.length * 16;
-//   let text_height = 24;
-//   drawRectangle(
-//     getColor(),
-//     { x: container.x, y: container.y },
-//     { width: text_width, height: text_height },
-//   );
-// };
-
-const DEBUG = false;
+const DEBUG = true;
 
 const renderBox = (layout: LayoutElement): void => {
   if (DEBUG) {
@@ -62,28 +63,17 @@ const renderBox = (layout: LayoutElement): void => {
   }
 };
 
-export const render = (container: RootContainer): void => {
+export const render = (root: RootContainer): void => {
   clearScreen();
 
-  container.children.forEach((child) => {
-    match(child, 'type', {
-      text: (text) => {
-        //renderText(child);
-      },
-      box: (box) => {
-        const container = createContainer(
-          box.props.orientation ?? 'row',
-          { x: 0, y: 0 },
-          {
-            width: 0,
-            height: 0,
-          },
-        );
-        const layout = calculateBox(box, container);
-        renderBox(layout);
-      },
-    });
-  });
+  const container = createContainer(
+    'row',
+    { x: 0, y: 0 },
+    {
+      width: 0,
+      height: 0,
+    },
+  );
 
-  colorIndex = 0;
+  calculateRoot(root);
 };
