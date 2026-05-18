@@ -157,7 +157,7 @@ export interface HIIFont {
 }
 
 export interface BootServices {
-  LocateProtocol(guid: string): GraphicsOutputProtocol | HIIFont | null;
+  LocateProtocol(guid: string): GraphicsOutputProtocol | HIIFont | ConEx | null;
   WaitForEvent(events: EfiEvent[]): number | null;
 }
 
@@ -171,6 +171,86 @@ export interface ConsoleIn {
   WaitForKey(): EfiEvent | null;
 }
 
+export enum ScanCodes {
+  ScanNull = 0x0000,
+  ScanUp = 0x0001,
+  ScanDown = 0x0002,
+  ScanRight = 0x0003,
+  ScanLeft = 0x0004,
+  ScanHome = 0x0005,
+  ScanEnd = 0x0006,
+  ScanInsert = 0x0007,
+  ScanDelete = 0x0008,
+  ScanPageUp = 0x0009,
+  ScanPageDown = 0x000a,
+  ScanF1 = 0x000b,
+  ScanF2 = 0x000c,
+  ScanF3 = 0x000d,
+  ScanF4 = 0x000e,
+  ScanF5 = 0x000f,
+  ScanF6 = 0x0010,
+  ScanF7 = 0x0011,
+  ScanF8 = 0x0012,
+  ScanF9 = 0x0013,
+  ScanF10 = 0x0014,
+  ScanF11 = 0x0015,
+  ScanF12 = 0x0016,
+  ScanEsc = 0x0017,
+}
+
+export interface EfiInputKey {
+  scanCode: ScanCodes;
+  unicodeChar: number;
+}
+
+export enum CharCodes {
+  CharNull = 0x0000,
+  CharBackspace = 0x0008,
+  CharTab = 0x0009,
+  CharLinefeed = 0x000A,
+  CharCarriageReturn = 0x000D,
+}
+
+export enum EfiShiftStates {
+  EfiShiftStateValid = 0x80000000,
+  EfiRightShiftPressed = 0x00000001,
+  EfiLeftShiftPressed = 0x00000002,
+  EfiRightControlPressed = 0x00000004,
+  EfiLeftControlPressed = 0x00000008,
+  EfiRightAltPressed = 0x00000010,
+  EfiLeftAltPressed = 0x00000020,
+  EfiRightLogoPressed = 0x00000040,
+  EfiLeftLogoPressed = 0x00000080,
+  EfiMenuKeyPressed = 0x00000100,
+  EfiSysReqPressed = 0x00000200,
+}
+
+export enum EfiToggleStates {
+  EfiToggleStateValid = 0x80,
+  EfiKeyStateExposed = 0x40,
+  EfiScrollLockActive = 0x01,
+  EfiNumLockActive = 0x02,
+  EfiCapsLockActive = 0x04,
+}
+
+export interface EfiKeyState {
+  keyShiftState: EfiShiftStates | 0;
+  keyToggleState: EfiToggleStates | 0;
+}
+
+export interface EfiKeyData {
+  keyState: EfiKeyState;
+  key: EfiInputKey;
+}
+
+export interface ConEx {
+  RegisterKeyNotify: (
+    options: EfiKeyData,
+    cb: (keyData: EfiKeyData) => void,
+  ) => number;
+  UnregisterKeyNotify: (handle: number) => void;
+}
+
 export interface SystemTable {
   BootServices: BootServices;
   ConOut: ConsoleOut;
@@ -180,6 +260,7 @@ export interface SystemTable {
 export interface EfiGuid {
   GraphicsOutput: string;
   HIIFont: string;
+  ConEx: string;
 }
 
 export interface Efi {

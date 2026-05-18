@@ -1,7 +1,40 @@
 import React, { useEffect, useState } from 'react';
+import { useGlobalKeyboard } from './hooks/global-keyboard';
+import { CharCodes, ScanCodes } from '../types';
 
 export function App() {
   const [count, setCount] = useState(0);
+  useEffect(() => {
+    const { unsubscribe } = useGlobalKeyboard(
+      {
+        key: {
+          scanCode: ScanCodes.ScanUp,
+          unicodeChar: CharCodes.CharNull
+        },
+        keyState: { keyShiftState: 0, keyToggleState: 0 },
+      },
+      (keyData) => {
+        setCount((c) => c + 1);
+      },
+    );
+    const { unsubscribe: unsubscribeDown } = useGlobalKeyboard(
+      {
+        key: {
+          scanCode: ScanCodes.ScanDown,
+          unicodeChar: CharCodes.CharNull
+        },
+        keyState: { keyShiftState: 0, keyToggleState: 0 },
+      },
+      (keyData) => {
+        setCount((c) => c - 1);
+      },
+    );
+
+    return () => {
+      unsubscribe();
+      unsubscribeDown();
+    }
+  }, []);
   useEffect(() => {
     //console.log('App - setting timeout')
     const id = setTimeout(() => {
