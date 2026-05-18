@@ -1,0 +1,3 @@
+[submodule "external/promethee"]
+	path = external/promethee
+	url = ssh://git@codeberg.org/laine-hallot/promethee.git
