@@ -1,8 +1,25 @@
+import type {
+  BoxElement,
+  Element,
+  ElementTypes,
+  RootContainer,
+  TextElement,
+} from './types';
+
+import ReactReconciler, { HostConfig, ReactContext } from 'react-reconciler';
+import {
+  DiscreteEventPriority,
+  ContinuousEventPriority,
+  DefaultEventPriority,
+} from 'react-reconciler/constants';
+import { match } from 'match-discriminated-union';
+import { render } from './render';
 
 const hostContext = {};
+// @ts-expect-error -- Undocumented form API that I don't even think we need
 const hostTransitionContext: ReactContext<any> = {};
 
-const reconciler = ReactReconciler<
+export const reconciler = ReactReconciler<
   ElementTypes,
   TextElement['props'] | BoxElement['props'],
   RootContainer,

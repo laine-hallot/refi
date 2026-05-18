@@ -14,7 +14,7 @@
     "./src/"
   ],
   "files": [
-    "src/host-shim.js",
-    "src/refi-pollyfills.ts",
+    "index.js",
+    "refi-pollyfills.d.ts",
   ]
 }

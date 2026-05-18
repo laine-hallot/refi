@@ -36,5 +36,8 @@
     "packages/example",
     "packages/uefi-react",
     "packages/polyfills"
-  ]
+  ],
+  "overrides": {
+    "@typescript/lib-dom": "@refi/polyfills"
+  }
 }

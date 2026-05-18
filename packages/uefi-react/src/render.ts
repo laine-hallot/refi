@@ -1,19 +1,19 @@
+import type { BltPixel, HIIFont } from '../types';
+import type { RootContainer } from './types';
+
 import { match } from 'match-discriminated-union';
-import { BltPixel, HIIFont } from '../types';
-import { RootContainer } from './types';
+
+import {
+  calculateRoot,
+  LayoutElement,
+} from '@refi/layout-engine';
+
 import {
   clearScreen,
   drawRectangle,
   drawText,
   getScreenSize,
 } from './uefi-graphics';
-import {
-  calculateBox,
-  calculateElement,
-  calculateRoot,
-  createContainer,
-  LayoutElement,
-} from './layout';
 
 const colorOrder: BltPixel[] = [
   { r: 255, g: 0, b: 0, a: 255 },
@@ -66,14 +66,5 @@ const renderBox = (layout: LayoutElement): void => {
 export const render = (root: RootContainer): void => {
   clearScreen();
 
-  const container = createContainer(
-    'row',
-    { x: 0, y: 0 },
-    {
-      width: 0,
-      height: 0,
-    },
-  );
-
-  calculateRoot(root);
+  renderBox(calculateRoot(root));
 };

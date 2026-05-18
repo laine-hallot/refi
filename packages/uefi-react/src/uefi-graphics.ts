@@ -4,8 +4,8 @@ import {
   HIIFont,
   EfiFontInfoMask,
   EfiHiiFontStyle,
-} from '../types';
-import { LayoutElement } from './layout';
+} from '../../../../types';
+import type { LayoutElement } from '@refi/layout-engine';
 
 const GOP = efi.SystemTable.BootServices.LocateProtocol(
   efi.guid.GraphicsOutput,
