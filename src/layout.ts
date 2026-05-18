@@ -1,4 +1,4 @@
-import type { Element, BoxElement } from './types';
+import type { Element, BoxElement, RootContainer } from './types';
 
 import { match } from 'match-discriminated-union';
 
@@ -89,25 +89,28 @@ type ToLayout<T extends Element> = T extends {
   children: Element[];
 }
   ? {
-      type: 'container';
-      component: Omit<T, 'children'>;
-      children: LayoutElement[];
-      container: Container;
-    }
+    type: 'container';
+    component: Omit<T, 'children'>;
+    children: LayoutElement[];
+    container: Container;
+    childrenContainer: Container;
+  }
   : { type: 'text'; component: T; container: TextContainer };
 
 export type LayoutElement = ToLayout<Element>;
+export type LayoutRoot = {
+  type: 'container';
+  component: Omit<RootContainer, 'children'>;
+  children: LayoutElement[];
+  container: Container;
+};
 
-const calculateElement = (
+export const calculateElement = (
   elm: Element,
   parentContainer: Container,
 ): LayoutElement => {
   return match(elm, 'type', {
-    box: (box) => {
-      const childLayout = calculateBox(box, parentContainer);
-
-      return childLayout;
-    },
+    box: (box) => calculateBox(box, parentContainer),
     text: (text) => {
       const textContainer = createTextContainer(
         calculatePositionUsingParent(
@@ -129,6 +132,64 @@ const calculateElement = (
       };
     },
   });
+};
+
+const calculateChildren = (
+  children: Element[],
+  parent: { orientation: 'row' | 'column'; x: number; y: number },
+): LayoutElement => {
+  const childrenContainer = createContainer(
+    parent.orientation,
+    { x: 0, y: 0 },
+    {
+      width: 0,
+      height: 0,
+    },
+  );
+
+  const layoutChildren = children.map((elm) => {
+    const layoutElement = calculateElement(elm, childrenContainer);
+
+    const newSize = calculateSizeWithNewChild(
+      childrenContainer.orientation,
+      { width: childrenContainer.width, height: childrenContainer.height },
+      {
+        width: layoutElement.container.width,
+        height: layoutElement.container.height,
+      },
+    );
+    childrenContainer.width = newSize.width;
+    childrenContainer.height = newSize.height;
+    return layoutElement;
+  });
+
+  return
+};
+
+export const calculateRoot = (root: RootContainer): LayoutRoot => {
+  const layoutChildren = calculateChildren(root.children, {
+    orientation: 'row',
+    x: 0,
+    y: 0,
+  });
+
+  const rootContainer = createContainer(
+    'row',
+    { x: 0, y: 0 },
+    {
+      width: root.props.width ?? 0,
+      height: root.props.height ?? 0,
+    },
+  );
+
+  const { children: _reactChildren, ...rest } = root;
+  return {
+    type: 'container',
+    component: rest,
+    container: rootContainer,
+    children: layoutChildren,
+    childrenContainer,
+  };
 };
 
 export const calculateBox = (
@@ -165,6 +226,15 @@ export const calculateBox = (
     return layoutElement;
   });
 
+  if (box.props.width !== undefined && box.props.width > boxContainer.width) {
+    boxContainer.width = box.props.width;
+  }
+  if (
+    box.props.height !== undefined &&
+    box.props.height > boxContainer.height
+  ) {
+    boxContainer.height = box.props.height;
+  }
   const { children: _reactChildren, ...rest } = box;
   return {
     type: 'container',
