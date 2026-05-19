@@ -1,22 +1,30 @@
 {
-  description = "Dev shell for Promethee — UEFI bindings for JavaScript";
+  description = "Dev shell for Refi - React for UEFI";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     flake-utils.url = "github:numtide/flake-utils";
   };
 
-  outputs = { self, nixpkgs, flake-utils }:
-    flake-utils.lib.eachDefaultSystem (system:
+  outputs =
+    {
+      self,
+      nixpkgs,
+      flake-utils,
+    }:
+    flake-utils.lib.eachDefaultSystem (
+      system:
       let
-        pkgs = import nixpkgs { inherit system;
+        pkgs = import nixpkgs {
+          inherit system;
           config = {
             permittedInsecurePackages = [
               "python-2.7.18.12"
             ];
           };
         };
-      in {
+      in
+      {
         devShells.default = pkgs.mkShell {
           packages = with pkgs; [
             # Build toolchain
@@ -25,8 +33,9 @@
             binutils
             nasm
 
-            nodejs_24
+            just
 
+            nodejs_24
 
             python27Full
             python315
@@ -45,5 +54,6 @@
             echo "  next:  ./get-deps && make run"
           '';
         };
-      });
+      }
+    );
 }

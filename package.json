@@ -3,10 +3,7 @@
   "version": "0.1.0",
   "description": "",
   "main": "index.js",
-  "scripts": {
-    "build": "rolldown -c",
-    "build:webpack": "webpack"
-  },
+  "scripts": {},
   "keywords": [],
   "author": "",
   "license": "ISC",
