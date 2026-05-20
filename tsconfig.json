@@ -6,10 +6,9 @@
     "noEmit": true,
     "allowJs": true,
     "jsx": "preserve",
-    "lib": [
-      "ES2015"
-    ]
+    "lib": ["ES2015"]
   },
+  "files": ["external/promethee/types.ts"],
   "references": [
     {
       "path": "./packages/example"
@@ -22,6 +21,6 @@
     },
     {
       "path": "./packages/uefi-react"
-    },
-  ],
+    }
+  ]
 }
