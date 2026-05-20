@@ -3,9 +3,11 @@
   "version": "1.0.0",
   "description": "",
   "main": "src/index.ts",
-  "files": [
-    "uefi-react.d.ts"
-  ],
+  "exports": {
+    ".": "./src/index.ts",
+    "./refi/jsx-runtime": "./jsx-runtime.d.ts",
+    "./refi/jsx-dev-runtime": "./jsx-dev-runtime.d.ts"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

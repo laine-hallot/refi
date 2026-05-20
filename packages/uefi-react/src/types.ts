@@ -15,17 +15,22 @@ export type BoxElement = {
     separator?: boolean;
     gap?: number;
   };
-  children: Element[];
+  children: UefiElement[];
 };
 export type TextElement = {
   type: 'text';
   props: BaseProps & { text: string };
 };
-export type Element = BoxElement | TextElement;
-export type ElementTypes = Element['type'];
+export type UefiElement = BoxElement | TextElement;
+export type ElementTypes = UefiElement['type'];
+
+export type UefiNode = UefiElement | null | undefined;
+
+export type FunctionComponent<P = {}> = (props: P) => UefiNode;
+export type FC<P = {}> = FunctionComponent<P>;
 
 export type RootElement = {
   type: 'root';
   props: { width?: number; height?: number; bgColor?: BltPixel };
-  children: Element[];
+  children: UefiElement[];
 };

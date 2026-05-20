@@ -26,16 +26,14 @@ export const createRoot = (options: {
     false,
     null,
     '',
-    (e) => {
-      console.log('UNCAUGHT ERROR');
-      console.error(e);
-    },
-    (e) => {
-      console.error(e);
+    (error) => {
+      console.error(error);
     },
     (error) => {
       console.error(error);
-      console.error(error.message);
+    },
+    (error) => {
+      console.error(error);
     },
     () => {},
   );
