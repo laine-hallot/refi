@@ -1,14 +1,15 @@
-import type {
-  RootContainer,
-} from './types';
+import type { RootElement } from './types';
 
 import { reconciler } from './host-config';
 import { getScreenSize } from './uefi-graphics.js';
 
 const screen = getScreenSize();
 
-export const createRoot = (options: { fullscreen?: boolean, bgColor?: BltPixel }) => {
-  const container: RootContainer = {
+export const createRoot = (options: {
+  fullscreen?: boolean;
+  bgColor?: BltPixel;
+}) => {
+  const container: RootElement = {
     type: 'root',
     props: {
       height: screen.verticalResolution,
@@ -26,7 +27,7 @@ export const createRoot = (options: { fullscreen?: boolean, bgColor?: BltPixel }
     null,
     '',
     (e) => {
-      console.log("UNCAUGHT ERROR");
+      console.log('UNCAUGHT ERROR');
       console.error(e);
     },
     (e) => {
@@ -36,11 +37,11 @@ export const createRoot = (options: { fullscreen?: boolean, bgColor?: BltPixel }
       console.error(error);
       console.error(error.message);
     },
-    () => { },
+    () => {},
   );
 
   const updateRoot = (element: React.ReactNode) => {
     reconciler.updateContainer(element, root, null, null);
   };
-  return { updateRoot }
-}
+  return { updateRoot };
+};

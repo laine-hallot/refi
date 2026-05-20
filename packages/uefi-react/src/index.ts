@@ -4,8 +4,10 @@ export type {
   BoxElement,
   Element,
   ElementTypes,
-  RootContainer,
+  RootElement,
   TextElement,
 } from './types';
 
 export { createRoot } from './reconciler';
+
+export { useGlobalKeyboard } from './hooks';

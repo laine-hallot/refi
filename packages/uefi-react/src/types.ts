@@ -24,7 +24,7 @@ export type TextElement = {
 export type Element = BoxElement | TextElement;
 export type ElementTypes = Element['type'];
 
-export type RootContainer = {
+export type RootElement = {
   type: 'root';
   props: { width?: number; height?: number; bgColor?: BltPixel };
   children: Element[];

@@ -5,15 +5,8 @@
     "module": "Preserve",
     "moduleResolution": "bundler",
     "jsx": "preserve",
-    "lib": [
-      "ES2015",
-      "DOM"
-    ],
+    "lib": ["ES2015", "DOM"]
   },
-  "include": [
-    "./src/"
-  ],
-  "files": [
-    "src/index.ts",
-  ]
+  "include": ["./src/"],
+  "files": ["src/index.ts"]
 }

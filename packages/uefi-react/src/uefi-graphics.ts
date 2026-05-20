@@ -4,7 +4,7 @@ import {
   HIIFont,
   EfiFontInfoMask,
   EfiHiiFontStyle,
-} from '../../../../types';
+} from '../../../external/promethee/types';
 import type { LayoutElement } from '@refi/layout-engine';
 
 const GOP = efi.SystemTable.BootServices.LocateProtocol(
@@ -20,6 +20,7 @@ type CoordinatePair = {
 };
 export const drawText = (
   text: Extract<LayoutElement, { component: { type: 'text' } }>,
+  position: { x: number; y: number },
 ) => {
   if (GOP === null || HII_FONT === null) {
     return;
@@ -29,17 +30,6 @@ export const drawText = (
   const verticalResolution = GOP.Mode?.Info?.VerticalResolution ?? 0;
   //console.log(`horizontalResolution ${horizontalResolution}`);
   //console.log(`verticalResolution ${verticalResolution}`);
-
-  const bgColor = { r: 0, g: 255, b: 0, a: 0 };
-
-  drawRectangle(
-    bgColor,
-    { x: text.container.x, y: text.container.y },
-    {
-      width: text.container.width,
-      height: text.container.height,
-    },
-  );
 
   HII_FONT.StringToImage(
     [
@@ -51,7 +41,12 @@ export const drawText = (
     ],
     text.component.props.text,
     {
-      BackgroundColor: bgColor,
+      BackgroundColor: text.component.props.bgColor ?? {
+        r: 0,
+        g: 0,
+        b: 0,
+        a: 0,
+      },
       ForegroundColor: { r: 255, g: 255, b: 255, a: 255 },
       FontInfoMask: [EfiFontInfoMask.EfiFontInfoSysFont],
       FontInfo: {
@@ -64,8 +59,8 @@ export const drawText = (
       width: horizontalResolution,
       height: verticalResolution,
     },
-    text.container.x,
-    text.container.y,
+    position.x,
+    position.y,
     null,
     null,
     null,

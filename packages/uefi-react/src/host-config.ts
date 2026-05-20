@@ -2,7 +2,7 @@ import type {
   BoxElement,
   Element,
   ElementTypes,
-  RootContainer,
+  RootElement,
   TextElement,
 } from './types';
 
@@ -22,7 +22,7 @@ const hostTransitionContext: ReactContext<any> = {};
 export const reconciler = ReactReconciler<
   ElementTypes,
   TextElement['props'] | BoxElement['props'],
-  RootContainer,
+  RootElement,
   Element,
   never,
   never,
@@ -163,7 +163,7 @@ export const reconciler = ReactReconciler<
     //println('waitForCommitToBeReady')
     return null;
   },
-  setCurrentUpdatePriority(newPriority) { },
+  setCurrentUpdatePriority(newPriority) {},
   getCurrentUpdatePriority() {
     return DefaultEventPriority;
   },

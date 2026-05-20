@@ -1,4 +1,4 @@
-import { ConEx, EfiKeyData } from '../../types';
+import { ConEx, EfiKeyData } from '../../../../external/promethee/types';
 
 const CON_EX = efi.SystemTable.BootServices.LocateProtocol(
   efi.guid.ConEx,
