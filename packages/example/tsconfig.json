@@ -4,10 +4,17 @@
     "strict": true,
     "module": "Preserve",
     "moduleResolution": "bundler",
-    "allowJs": true,
-    "jsx": "preserve",
-    "lib": ["ES2015", "DOM"]
+    "jsx": "react-jsx",
+    "jsxImportSource": "@refi/uefi-react/refi",
+    "lib": [
+      "ES2015",
+      "DOM"
+    ]
   },
-  "include": ["./src/"],
-  "files": ["src/main.ts"]
+  "include": [
+    "./src/"
+  ],
+  "files": [
+    "src/main.ts"
+  ]
 }

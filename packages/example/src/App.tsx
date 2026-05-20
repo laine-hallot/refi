@@ -1,14 +1,18 @@
+import type { FC } from '@refi/uefi-react';
+
 import React, { useEffect, useState } from 'react';
 import { useGlobalKeyboard } from '@refi/uefi-react';
 import { CharCodes, ScanCodes } from '../../../external/promethee/types';
 
-const Thing: React.FC<{}> = ({ }) => {
+const Thing: FC<{}> = ({ }) => {
   return (
     <box orientation="row">
-      <text text="Testing non-intrinsics" />
+      <text text="Testing non-intrinsics 1" />
     </box>
   );
 };
+
+type r = ReturnType<typeof Thing>
 
 export function App() {
   const [count, setCount] = useState(0);
@@ -55,8 +59,9 @@ export function App() {
     <box orientation="column" separator={true}>
       <text border={1} text={'tick ' + count} />
       <text border={1} margin={8} padding={16} text="Hiiiiiiiiiiiii" />
-      <text border={1} text="omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam." />
       <Thing />
+      {undefined}
+      <text border={1} text="omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam." />
       <box separator={true}>
         <text text="testing" />
         <text text="hiiiiii" />
