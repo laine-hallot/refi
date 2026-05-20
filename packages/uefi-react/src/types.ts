@@ -1,9 +1,20 @@
 import { BltPixel } from '../types';
 
-export type BaseProps = { width?: number; height?: number; bgColor?: BltPixel };
+export type BaseProps = {
+  width?: number;
+  height?: number;
+  bgColor?: BltPixel;
+  padding?: number;
+  margin?: number;
+  border?: number;
+};
 export type BoxElement = {
   type: 'box';
-  props: BaseProps & { orientation?: 'row' | 'column'; separator: boolean };
+  props: BaseProps & {
+    orientation?: 'row' | 'column';
+    separator?: boolean;
+    gap?: number;
+  };
   children: Element[];
 };
 export type TextElement = {
