@@ -35,11 +35,11 @@ const containerFromElement = (
   };
 
   return {
-    border: elm.props.border ?? 0,
+    border: elm.props.style?.border ?? 0,
     height: 0,
     width: 0,
-    margin: elm.props.margin ?? 0,
-    padding: elm.props.padding ?? 0,
+    margin: elm.props.style?.margin ?? 0,
+    padding: elm.props.style?.padding ?? 0,
     x: 0,
     y: 0,
     z: recursionDepth,
@@ -140,14 +140,14 @@ const calculateText = (
   recursionDepth: number,
 ): Extract<LayoutElement, { type: 'text' }> => {
   const textContainer: TextContainer = {
-    border: element.props.border ?? 0,
-    margin: element.props.margin ?? 0,
-    padding: element.props.padding ?? 0,
+    border: element.props.style?.border ?? 0,
+    margin: element.props.style?.margin ?? 0,
+    padding: element.props.style?.padding ?? 0,
     x: 0,
     y: 0,
     z: recursionDepth,
     // assume single line text
-    height: element.props.height ?? 19,
+    height: element.props.style?.height ?? 19,
     width: element.props.text.length * 8,
   };
 
@@ -223,8 +223,8 @@ export const calculateRoot = (root: RootElement): LayoutRoot => {
 
   const size = totalSize(boxContainer);
 
-  boxContainer.width = root.props.width ?? size.width;
-  boxContainer.height = root.props.height ?? size.height;
+  boxContainer.width = root.props.style?.width ?? size.width;
+  boxContainer.height = root.props.style?.height ?? size.height;
 
   return {
     type: 'container',
