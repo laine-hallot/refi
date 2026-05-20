@@ -1,10 +1,10 @@
 promethee-init:
     #!/usr/bin/env bash
-    cd external/promethee && ./get-deps;
+    cd packages/runtime/external/promethee && ./get-deps;
     cd duktape && make configure-deps
 
 promethee-run:
-    cd external/promethee && make run
+    cd packages/runtime/external/promethee && make run
 
 refi-init:
     npm i
@@ -21,5 +21,5 @@ init:
     just refi-init
 
 dev: refi-build-example
-    cp packages/example/dist/script.js external/promethee/
+    cp packages/example/dist/script.js packages/runtime/external/promethee/
     just promethee-run

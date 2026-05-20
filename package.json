@@ -32,7 +32,8 @@
     "packages/layout-engine",
     "packages/example",
     "packages/uefi-react",
-    "packages/polyfills"
+    "packages/polyfills",
+    "packages/runtime"
   ],
   "overrides": {
     "@typescript/lib-dom": "@refi/polyfills"

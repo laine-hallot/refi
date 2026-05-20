@@ -67,7 +67,7 @@ interface Global {
 /**
  * Duktape object
  */
-declare module Duktape {
+declare namespace Duktape {
   /**
    * Duktape version number: (major * 10000) + (minor * 100) + patch
    */
