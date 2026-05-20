@@ -6,15 +6,8 @@
     "moduleResolution": "bundler",
     "allowJs": true,
     "jsx": "preserve",
-    "lib": [
-      "ES2015",
-      "DOM"
-    ]
+    "lib": ["ES2015", "DOM"]
   },
-  "include": [
-    "./src/"
-  ],
-  "files": [
-    "src/main.ts",
-  ]
+  "include": ["./src/"],
+  "files": ["src/main.ts"]
 }

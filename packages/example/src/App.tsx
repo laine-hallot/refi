@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { useGlobalKeyboard } from './hooks/global-keyboard';
-import { CharCodes, ScanCodes } from '../types';
+import { useGlobalKeyboard } from '@refi/uefi-react';
+import { CharCodes, ScanCodes } from '../../../external/promethee/types';
 
 const Thing: React.FC<{}> = ({ }) => {
   return (
-    <box orientation='row'>
+    <box orientation="row">
       <text text="Testing non-intrinsics" />
     </box>
-  )
-}
+  );
+};
 
 export function App() {
   const [count, setCount] = useState(0);
@@ -53,9 +53,9 @@ export function App() {
   });
   return (
     <box orientation="column" separator={true}>
-      <text text={'tick ' + count} />
-      <text text="Hiiiiiiiiiiiii" />
-      <text text="omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam." />
+      <text border={1} text={'tick ' + count} />
+      <text border={1} margin={8} padding={16} text="Hiiiiiiiiiiiii" />
+      <text border={1} text="omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam." />
       <Thing />
       <box separator={true}>
         <text text="testing" />
