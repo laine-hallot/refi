@@ -63,7 +63,7 @@ const renderBox = (
     renderMarginBorderPadding(layout, parent);
     // content rectangle
     drawRectangle(
-      layout.component.props.bgColor ?? { r: 0, g: 0, b: 0, a: 0 },
+      layout.component.props.style?.bgColor ?? { r: 0, g: 0, b: 0, a: 0 },
       { x: parent.x + layout.container.x, y: parent.y + layout.container.y },
       {
         width:

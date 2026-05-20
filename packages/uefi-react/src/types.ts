@@ -1,6 +1,6 @@
 import { BltPixel } from '../types';
 
-export type BaseProps = {
+export type Style = {
   width?: number;
   height?: number;
   bgColor?: BltPixel;
@@ -8,6 +8,11 @@ export type BaseProps = {
   margin?: number;
   border?: number;
 };
+
+export type BaseProps = {
+  style?: Style;
+};
+
 export type BoxElement = {
   type: 'box';
   props: BaseProps & {
@@ -31,6 +36,6 @@ export type FC<P = {}> = FunctionComponent<P>;
 
 export type RootElement = {
   type: 'root';
-  props: { width?: number; height?: number; bgColor?: BltPixel };
+  props: { style: { width?: number; height?: number; bgColor?: BltPixel } };
   children: UefiElement[];
 };
