@@ -1,10 +1,4 @@
-import type {
-  Element,
-  BoxElement,
-  RootElement,
-  TextElement,
-} from '@refi/uefi-react';
-import { getScreenSize } from '@refi/uefi-react/src/uefi-graphics';
+import type { UefiElement, RootElement } from '@refi/uefi-react';
 
 import { match } from 'match-discriminated-union';
 
@@ -30,7 +24,7 @@ type Container = ContainerBase & {
 };
 
 const containerFromElement = (
-  elm: Extract<Element, { children: Element[] }>,
+  elm: Extract<UefiElement, { children: UefiElement[] }>,
   recursionDepth: number,
 ): Container => {
   const childrenContainer: Container['childrenContainer'] = {
@@ -70,7 +64,7 @@ const totalSize = (container: Container | TextContainer) => {
 
 const addChildToContainerChildren = (
   container: Container,
-  child: Element,
+  child: UefiElement,
   recursionDepth: number,
 ): {
   update: { width: number; height: number };
@@ -110,7 +104,7 @@ const addChildToContainerChildren = (
 };
 
 const calculateBox = (
-  element: Extract<Element, { children: Element[] }>,
+  element: Extract<UefiElement, { children: UefiElement[] }>,
   recursionDepth: number,
 ): Extract<LayoutElement, { type: 'container' }> => {
   const boxContainer = containerFromElement(element, recursionDepth);
@@ -142,7 +136,7 @@ const calculateBox = (
 };
 
 const calculateText = (
-  element: Extract<Element, { type: 'text' }>,
+  element: Extract<UefiElement, { type: 'text' }>,
   recursionDepth: number,
 ): Extract<LayoutElement, { type: 'text' }> => {
   const textContainer: TextContainer = {
@@ -153,7 +147,7 @@ const calculateText = (
     y: 0,
     z: recursionDepth,
     // assume single line text
-    height: element.props.height ?? 20,
+    height: element.props.height ?? 19,
     width: element.props.text.length * 8,
   };
 
@@ -170,7 +164,7 @@ const calculateText = (
 };
 
 const calculateElement = (
-  element: Element,
+  element: UefiElement,
   recursionDepth: number,
 ): LayoutElement => {
   return match(element, 'type', {
@@ -179,8 +173,8 @@ const calculateElement = (
   });
 };
 
-type ToLayout<T extends Element> = T extends {
-  children: Element[];
+type ToLayout<T extends UefiElement> = T extends {
+  children: UefiElement[];
 }
   ? {
       type: 'container';
@@ -190,7 +184,7 @@ type ToLayout<T extends Element> = T extends {
     }
   : { type: 'text'; component: T; container: TextContainer };
 
-export type LayoutElement = ToLayout<Element>;
+export type LayoutElement = ToLayout<UefiElement>;
 export type LayoutRoot = {
   type: 'container';
   component: Omit<RootElement, 'children'>;
