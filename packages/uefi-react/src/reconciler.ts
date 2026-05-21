@@ -1,7 +1,8 @@
-import type { RootElement } from './types';
+import type { BltPixel } from '@refi/runtime';
+import type { RootElement } from '@refi/layout-engine';
+import { getScreenSize } from '@refi/layout-engine';
 
 import { reconciler } from './host-config';
-import { getScreenSize } from './uefi-graphics.js';
 
 const screen = getScreenSize();
 
@@ -12,9 +13,11 @@ export const createRoot = (options: {
   const container: RootElement = {
     type: 'root',
     props: {
-      height: screen.verticalResolution,
-      width: screen.horizontalResolution,
-      bgColor: { r: 5, g: 6, b: 22, a: 255 },
+      style: {
+        height: screen.verticalResolution,
+        width: screen.horizontalResolution,
+        bgColor: { r: 5, g: 6, b: 22, a: 255 },
+      },
     },
     children: [],
   };

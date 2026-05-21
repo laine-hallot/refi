@@ -1,4 +1,4 @@
-import type { UefiElement, RootElement } from '@refi/uefi-react';
+import type { RootElement, UefiElement } from './types';
 
 import { match } from 'match-discriminated-union';
 

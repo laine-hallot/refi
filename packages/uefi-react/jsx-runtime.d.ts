@@ -1,9 +1,6 @@
-import type {
-  BoxElement,
-  TextElement,
-  UefiElement,
-  UefiNode,
-} from './src/types';
+import type { BoxElement, TextElement, UefiElement } from '@refi/layout-engine';
+
+import type { UefiNode } from './src/types';
 
 type Intrinsic<T extends UefiElement> = T extends {
   children: UefiElement[];

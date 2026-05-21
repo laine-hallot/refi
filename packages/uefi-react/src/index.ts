@@ -1,4 +1,4 @@
-import '@refi/polyfills';
+import '@refi/runtime/runtime.d';
 
 export type {
   BoxElement,
@@ -12,7 +12,5 @@ export type {
 } from './types';
 
 export { createRoot } from './reconciler';
-
-export { getScreenSize } from './uefi-graphics';
 
 export { useGlobalKeyboard } from './hooks';

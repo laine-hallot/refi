@@ -1,10 +1,9 @@
-import type { BltPixel, HIIFont } from '../types';
 import type { RootElement } from './types';
+import type { LayoutElement, LayoutRoot } from './layout';
 
 import { match } from 'match-discriminated-union';
 
-import { calculateRoot, LayoutElement, LayoutRoot } from '@refi/layout-engine';
-
+import { calculateRoot } from './layout';
 import { clearScreen, drawRectangle, drawText } from './uefi-graphics';
 
 const DEBUG = false;

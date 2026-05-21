@@ -1,11 +1,12 @@
+import type { LayoutElement } from './layout';
+
 import {
   BltPixel,
   GraphicsOutputProtocol,
   HIIFont,
   EfiFontInfoMask,
   EfiHiiFontStyle,
-} from '../../../external/promethee/types';
-import type { LayoutElement } from '@refi/layout-engine';
+} from '@refi/runtime';
 
 const GOP = efi.SystemTable.BootServices.LocateProtocol(
   efi.guid.GraphicsOutput,
@@ -41,7 +42,7 @@ export const drawText = (
     ],
     text.component.props.text,
     {
-      BackgroundColor: text.component.props.bgColor ?? {
+      BackgroundColor: text.component.props.style?.bgColor ?? {
         r: 0,
         g: 0,
         b: 0,

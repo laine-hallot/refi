@@ -4,16 +4,13 @@ import type {
   ElementTypes,
   RootElement,
   TextElement,
-} from './types';
+} from '@refi/layout-engine';
 
-import ReactReconciler, { HostConfig, ReactContext } from 'react-reconciler';
-import {
-  DiscreteEventPriority,
-  ContinuousEventPriority,
-  DefaultEventPriority,
-} from 'react-reconciler/constants';
+import ReactReconciler, { ReactContext } from 'react-reconciler';
+import { DefaultEventPriority } from 'react-reconciler/constants';
 import { match } from 'match-discriminated-union';
-import { render } from './render';
+
+import { render } from '@refi/layout-engine';
 
 const hostContext = {};
 // @ts-expect-error -- Undocumented form API that I don't even think we need
