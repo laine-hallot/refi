@@ -7,4 +7,5 @@ export type {
 } from './types';
 
 export { calculateRoot } from './layout';
+export { getScreenSize } from './uefi-graphics';
 export { render } from './render';

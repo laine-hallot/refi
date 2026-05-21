@@ -26,16 +26,14 @@
     "@types/react-reconciler": "^0.33.0",
     "prettier": "^3.8.3",
     "rolldown": "^1.0.0",
-    "typescript": "^6.0.3"
+    "typescript": "^6.0.3",
+    "@typescript/lib-dom": "file:packages/polyfills",
+    "@typescript/lib-es2015": "file:packages/runtime-types"
   },
   "workspaces": [
     "packages/layout-engine",
     "packages/example",
     "packages/uefi-react",
-    "packages/polyfills",
     "packages/runtime"
-  ],
-  "overrides": {
-    "@typescript/lib-dom": "@refi/polyfills"
-  }
+  ]
 }

@@ -5,7 +5,7 @@
   "main": "index.js",
   "devDependencies": {},
   "scripts": {
-    "build": "rolldown -c"
+    "build": "tsc && rolldown -c"
   },
   "keywords": [],
   "author": "",

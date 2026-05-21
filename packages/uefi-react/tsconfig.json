@@ -1,12 +1,12 @@
 {
+  "extends": "../../common.tsconfig.json",
   "compilerOptions": {
-    "composite": true,
-    "strict": true,
-    "module": "Preserve",
-    "moduleResolution": "bundler",
-    "jsx": "preserve",
-    "lib": ["ES2015", "DOM"]
+    "outDir": "./dist",
   },
-  "include": ["./src/"],
-  "files": ["src/index.ts"]
+  "include": [
+    "./src/"
+  ],
+  "files": [
+    "src/index.ts"
+  ]
 }

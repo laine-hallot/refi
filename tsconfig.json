@@ -1,15 +1,5 @@
 {
-  "compilerOptions": {
-    "strict": true,
-    "module": "Preserve",
-    "moduleResolution": "bundler",
-    "noEmit": true,
-    "allowJs": true,
-    "jsx": "preserve",
-    "lib": [
-      "ES2015"
-    ]
-  },
+  "include": [],
   "references": [
     {
       "path": "./packages/example"
@@ -18,13 +8,10 @@
       "path": "./packages/layout-engine"
     },
     {
-      "path": "./packages/polyfills"
-    },
-    {
       "path": "./packages/uefi-react"
     },
     {
       "path": "./packages/runtime"
-    }
+    },
   ]
 }

@@ -2,7 +2,7 @@ import type { FC } from '@refi/uefi-react';
 
 import React, { useEffect, useState } from 'react';
 import { useGlobalKeyboard } from '@refi/uefi-react';
-import { CharCodes, ScanCodes } from '../../../external/promethee/types';
+import { CharCodes, ScanCodes } from '@refi/runtime';
 
 const Thing: FC<{}> = ({ }) => {
   return (
@@ -57,11 +57,11 @@ export function App() {
   });
   return (
     <box orientation="column" separator={true}>
-      <text border={1} text={'tick ' + count} />
-      <text border={1} margin={8} padding={16} text="Hiiiiiiiiiiiii" />
+      <text style={{ border: 1 }} text={'tick ' + count} />
+      <text style={{ border: 1, margin: 8, padding: 16 }} text="Hiiiiiiiiiiiii" />
       <Thing />
       {undefined}
-      <text border={1} text="omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam." />
+      <text style={{ border: 1 }} text="omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam." />
       <box separator={true}>
         <text text="testing" />
         <text text="hiiiiii" />

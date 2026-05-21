@@ -1,15 +1,6 @@
 import '@refi/runtime/runtime.d';
 
-export type {
-  BoxElement,
-  UefiElement,
-  UefiNode,
-  ElementTypes,
-  RootElement,
-  TextElement,
-  FC,
-  FunctionComponent,
-} from './types';
+export type { UefiNode, FC, FunctionComponent } from './types';
 
 export { createRoot } from './reconciler';
 

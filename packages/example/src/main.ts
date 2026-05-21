@@ -13,7 +13,8 @@ try {
     __host.tick();
   }
 } catch (e) {
-  println('error on iteration: ' + iters);
-  println(e);
+  console.error('error on iteration: ' + iters);
+  console.error(e);
+  Array;
 }
 println('done after ' + iters + ' iterations');

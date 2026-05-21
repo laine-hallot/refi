@@ -1,15 +1,9 @@
 {
+  "extends": "../../common.tsconfig.json",
   "compilerOptions": {
-    "composite": true,
-    "strict": true,
-    "module": "Preserve",
-    "moduleResolution": "bundler",
     "jsx": "react-jsx",
     "jsxImportSource": "@refi/uefi-react/refi",
-    "lib": [
-      "ES2015",
-      "DOM"
-    ]
+    "outDir": "./dist",
   },
   "include": [
     "./src/"

@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "composite": true,
+    "strict": true,
+    "module": "Preserve",
+    "moduleResolution": "bundler",
+    "lib": [
+      "es5"
+    ],
+    "skipLibCheck": true,
+    "emitDeclarationOnly": true
+  }
+}

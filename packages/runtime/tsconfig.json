@@ -1,22 +1,14 @@
 {
+  "extends": "../../common.tsconfig.json",
   "compilerOptions": {
-    "composite": true,
-    "strict": true,
-    "module": "Preserve",
-    "moduleResolution": "bundler",
-    "allowJs": true,
-    "jsx": "preserve",
-    "lib": [
-      "es2015",
-    ],
-    "outDir": "./dist"
+    "outDir": "./dist",
   },
   "include": [
     "./src/"
   ],
   "files": [
     "index.ts",
-    "duktape.ts",
+    "runtime.d.ts",
     "./external/promethee/types.ts"
   ]
 }

@@ -6,7 +6,7 @@
   "exports": {
     ".": "./src/index.ts",
     "./refi/jsx-runtime": "./jsx-runtime.d.ts",
-    "./refi/jsx-dev-runtime": "./jsx-dev-runtime.d.ts"
+    "./refi/jsx-dev-runtime": "./jsx-runtime.d.ts"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

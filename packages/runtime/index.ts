@@ -1,1 +1,1 @@
-export type * from './external/promethee/types';
+export * from './external/promethee/types';
