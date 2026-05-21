@@ -1,6 +1,6 @@
 import type { BltPixel } from '@refi/runtime';
 import type { RootElement } from '@refi/layout-engine';
-import { getScreenSize } from '@refi/layout-engine';
+import { getScreenSize } from '@refi/runtime';
 
 import { reconciler } from './host-config';
 
