@@ -15,6 +15,5 @@ try {
 } catch (e) {
   console.error('error on iteration: ' + iters);
   console.error(e);
-  Array;
 }
 println('done after ' + iters + ' iterations');

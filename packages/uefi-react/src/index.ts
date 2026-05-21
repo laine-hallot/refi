@@ -1,4 +1,5 @@
 import '@refi/runtime/runtime.d';
+import '@refi/runtime';
 
 export type { UefiNode, FC, FunctionComponent } from './types';
 
