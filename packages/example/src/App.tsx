@@ -2,7 +2,7 @@ import type { FC } from '@refi/uefi-react';
 
 import React, { useEffect, useState } from 'react';
 import { useGlobalKeyboard } from '@refi/uefi-react';
-import { CharCodes, ScanCodes } from '@refi/runtime';
+import { CharCodes, pointerState, ScanCodes } from '@refi/runtime';
 
 const Thing: FC<{}> = ({ }) => {
   return (
@@ -61,6 +61,7 @@ export function App() {
       <text style={{ border: 1, margin: 8, padding: 16 }} text="Hiiiiiiiiiiiii" />
       <Thing />
       {undefined}
+      <text text={JSON.stringify(pointerState)} />
       <text style={{ border: 1 }} text="omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam." />
       <box separator={true}>
         <text text="testing" />
