@@ -42,7 +42,7 @@
   if (typeof g.setTimeout !== 'function') {
     g.setTimeout = function (fn, ms) {
       var id = _nextId++;
-      _timers.push({ id: id, fn: fn, due: nowMs() + (ms | 0) });
+      _timers.push({ id: id, fn: fn, due: nowMs() + (ms | 0), repeat: false });
       return id;
     };
   }
@@ -57,11 +57,27 @@
     };
   }
 
-  if (typeof g.setTimeout !== 'function') {
+  if (typeof g.setInterval !== 'function') {
     g.setInterval = function (fn, ms) {
       var id = _nextId++;
-      _timers.push({ id: id, fn: fn, due: nowMs() + (ms | 0) });
+      _timers.push({
+        id: id,
+        fn: fn,
+        due: nowMs() + (ms | 0),
+        repeat: true,
+        interval: ms,
+      });
       return id;
+    };
+  }
+  if (typeof g.clearInterval !== 'function') {
+    g.clearInterval = function (id) {
+      for (var i = 0; i < _timers.length; i++) {
+        if (_timers[i].id === id) {
+          _timers.splice(i, 1);
+          return;
+        }
+      }
     };
   }
 
@@ -106,7 +122,17 @@
         var idx = _timers.indexOf(ready[j]);
         if (idx >= 0) _timers.splice(idx, 1);
         try {
-          ready[j].fn();
+          const elm = ready[j];
+          elm.fn();
+          if (elm.repeat) {
+            _timers.push({
+              id: elm.id,
+              fn: elm.fn,
+              due: nowMs() + (elm.interval | 0),
+              repeat: true,
+              interval: elm.interval,
+            });
+          }
         } catch (e) {
           console.log('error in timer callback "' + ready[j].fn.name + '":');
           console.log(e);

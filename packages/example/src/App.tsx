@@ -49,12 +49,12 @@ export function App() {
   }, []);
   useEffect(() => {
     //console.log('App - setting timeout')
-    const id = setTimeout(() => {
+    const id = setInterval(() => {
       //console.log('App - TIMEOUT COMPLETE');
       setCount((c) => c + 1);
     }, 1000);
-    return () => clearTimeout(id);
-  });
+    return () => clearInterval(id);
+  }, []);
   return (
     <box orientation="column" separator={true}>
       <text style={{ border: 1 }} text={'tick ' + count} />
