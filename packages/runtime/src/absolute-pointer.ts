@@ -2,9 +2,6 @@ import type {
   AbsolutePointer,
   AbsolutePointerMode,
   AbsolutePointerState,
-  Pointer,
-  PointerMode,
-  PointerState,
 } from '../external/promethee/types';
 
 const POINTER = efi.SystemTable.BootServices.LocateProtocol(
@@ -12,10 +9,10 @@ const POINTER = efi.SystemTable.BootServices.LocateProtocol(
 ) as AbsolutePointer | null;
 
 const pointer: AbsolutePointerState = {
-  activeButtons: 0,
   currentX: 0,
   currentY: 0,
   currentZ: 0,
+  activeButtons: 0,
 };
 const mode: AbsolutePointerMode = {
   absoluteMinX: 0,
@@ -27,12 +24,15 @@ const mode: AbsolutePointerMode = {
   attributes: 0,
 };
 setInterval(() => {
-  println('before wait');
   const handle = POINTER!.waitForInput();
   const idx = efi.SystemTable.BootServices.WaitForEvent([handle]);
-  println('after wait, idx=' + idx);
   const state = POINTER!.getState();
-  println('state: ' + JSON.stringify(state));
-}, 100);
+  if (state !== null) {
+    pointer.activeButtons = state.activeButtons;
+    pointer.currentX = state.currentX;
+    pointer.currentY = state.currentY;
+    pointer.currentZ = state.currentZ;
+  }
+}, 8);
 
 export default { pointer, mode };

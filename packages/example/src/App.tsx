@@ -2,7 +2,7 @@ import type { FC } from '@refi/uefi-react';
 
 import React, { useEffect, useState } from 'react';
 import { useGlobalKeyboard } from '@refi/uefi-react';
-import { CharCodes, pointerState, ScanCodes } from '@refi/runtime';
+import { CharCodes, simplePointer, ScanCodes, PointerInfo } from '@refi/runtime';
 
 const Thing: FC<{}> = ({ }) => {
   return (
@@ -47,14 +47,23 @@ export function App() {
       unsubscribeDown();
     };
   }, []);
-  useEffect(() => {
-    //console.log('App - setting timeout')
-    const id = setInterval(() => {
-      //console.log('App - TIMEOUT COMPLETE');
-      setCount((c) => c + 1);
-    }, 1000);
-    return () => clearInterval(id);
-  }, []);
+  // useEffect(() => {
+  //   //console.log('App - setting timeout')
+  //   const id = setInterval(() => {
+  //     //console.log('App - TIMEOUT COMPLETE');
+  //     setCount((c) => c + 1);
+  //   }, 1000);
+  //   return () => clearInterval(id);
+  // }, []);
+
+  const [pointerState, setPointerState] = useState<PointerInfo>({
+    currentX: 0,
+    currentY: 0,
+    currentZ: 0,
+    leftButton: false,
+    rightButton: false,
+  });
+
   return (
     <box orientation="column" separator={true}>
       <text style={{ border: 1 }} text={'tick ' + count} />

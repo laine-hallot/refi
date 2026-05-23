@@ -1,7 +1,8 @@
 import './src/polyfills/index.js';
 
-import pointerState from './src/pointer';
+import simplePointer from './src/simple-pointer';
+export type { PointerInfo } from './src/simple-pointer';
 
 export * from './external/promethee/types';
 export { getScreenSize } from './src/graphics';
-export { pointerState };
+export { simplePointer };

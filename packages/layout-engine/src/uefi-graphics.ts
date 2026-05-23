@@ -6,6 +6,7 @@ import {
   HIIFont,
   EfiFontInfoMask,
   EfiHiiFontStyle,
+  simplePointer,
 } from '@refi/runtime';
 
 const GOP = efi.SystemTable.BootServices.LocateProtocol(
@@ -109,3 +110,21 @@ export const clearScreen = () => {
     0,
   );
 };
+
+simplePointer.registerListener((pointer) => {
+  if (GOP === null) {
+    return;
+  }
+
+  GOP.Blt(
+    { r: 255, g: 255, b: 255, a: 255 },
+    'EfiBltVideoFill',
+    pointer.currentX,
+    pointer.currentY,
+    pointer.currentX,
+    pointer.currentY,
+    1,
+    1,
+    0,
+  );
+});
