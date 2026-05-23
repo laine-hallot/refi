@@ -1,4 +1,4 @@
-import type { LayoutElement } from './layout';
+import type { LayoutElement, LayoutText } from './layout';
 
 import {
   BltPixel,
@@ -21,7 +21,7 @@ type CoordinatePair = {
   y: number;
 };
 export const drawText = (
-  text: Extract<LayoutElement, { component: { type: 'text' } }>,
+  text: LayoutText,
   position: { x: number; y: number },
 ) => {
   if (GOP === null || HII_FONT === null) {
@@ -41,9 +41,9 @@ export const drawText = (
       'EFI_HII_OUT_FLAG_CLIP_CLEAN_Y',
       'EFI_HII_OUT_FLAG_CLIP',
     ],
-    text.component.props.text,
+    text.componentProps.text,
     {
-      BackgroundColor: text.component.props.style?.bgColor ?? {
+      BackgroundColor: text.componentProps.style?.bgColor ?? {
         r: 0,
         g: 0,
         b: 0,

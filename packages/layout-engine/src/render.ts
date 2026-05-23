@@ -6,7 +6,7 @@ import { match } from 'match-discriminated-union';
 import { calculateRoot } from './layout';
 import { clearScreen, drawRectangle, drawText } from './uefi-graphics';
 
-const DEBUG = false;
+const DEBUG = true;
 
 const renderMarginBorderPadding = (
   layout: LayoutRoot | LayoutElement,
@@ -15,37 +15,42 @@ const renderMarginBorderPadding = (
   // margin rectangle
   drawRectangle(
     { r: 0, g: 0, b: 0, a: 0 },
-    { x: layout.container.x, y: layout.container.y },
-    { width: layout.container.width, height: layout.container.height },
+    { x: layout.position.x, y: layout.position.y },
+    {
+      width: layout.dimensions.totalWidth,
+      height: layout.dimensions.totalHeight,
+    },
   );
   // border rectangle
   drawRectangle(
     { r: 255, g: 255, b: 255, a: 255 },
     {
-      x: layout.container.x + layout.container.margin,
-      y: layout.container.y + layout.container.margin,
+      x: layout.position.x + layout.dimensions.margin,
+      y: layout.position.y + layout.dimensions.margin,
     },
     {
-      width: layout.container.width - layout.container.margin * 2,
-      height: layout.container.height - layout.container.margin * 2,
+      width:
+        layout.dimensions.width +
+        layout.dimensions.border * 2 +
+        layout.dimensions.padding * 2,
+      height:
+        layout.dimensions.height +
+        layout.dimensions.border * 2 +
+        layout.dimensions.padding * 2,
     },
   );
   // padding rectangle
   drawRectangle(
     { r: 0, g: 0, b: 0, a: 0 },
     {
-      x: layout.container.x + layout.container.margin + layout.container.border,
-      y: layout.container.y + layout.container.margin + layout.container.border,
+      x:
+        layout.position.x + layout.dimensions.margin + layout.dimensions.border,
+      y:
+        layout.position.y + layout.dimensions.margin + layout.dimensions.border,
     },
     {
-      width:
-        layout.container.width -
-        layout.container.margin * 2 -
-        layout.container.border * 2,
-      height:
-        layout.container.height -
-        layout.container.margin * 2 -
-        layout.container.border * 2,
+      width: layout.dimensions.width + layout.dimensions.padding * 2,
+      height: layout.dimensions.height + layout.dimensions.padding * 2,
     },
   );
 };
@@ -55,26 +60,18 @@ const renderBox = (
   parent: { x: number; y: number },
 ): void => {
   if (DEBUG) {
-    println(layout.type + ': ' + JSON.stringify(layout.container));
+    println(layout.type + ': ' + JSON.stringify(layout));
   } else {
-    layout.container.x = parent.x + layout.container.x;
-    layout.container.y = parent.y + layout.container.y;
+    layout.position.x = parent.x + layout.position.x;
+    layout.position.y = parent.y + layout.position.y;
     renderMarginBorderPadding(layout, parent);
     // content rectangle
     drawRectangle(
-      layout.component.props.style?.bgColor ?? { r: 0, g: 0, b: 0, a: 0 },
-      { x: parent.x + layout.container.x, y: parent.y + layout.container.y },
+      layout.componentProps.style?.bgColor ?? { r: 0, g: 0, b: 0, a: 0 },
+      { x: parent.x + layout.position.x, y: parent.y + layout.position.y },
       {
-        width:
-          layout.container.width -
-          layout.container.margin * 2 -
-          layout.container.border * 2 -
-          layout.container.padding * 2,
-        height:
-          layout.container.height -
-          layout.container.margin * 2 -
-          layout.container.border * 2 -
-          layout.container.padding * 2,
+        width: layout.dimensions.width,
+        height: layout.dimensions.height,
       },
     );
   }
@@ -83,31 +80,29 @@ const renderBox = (
       match(child, 'type', {
         container: (container) => {
           renderBox(container, {
-            x: parent.x + container.container.x,
-            y: parent.y + container.container.y,
+            x: parent.x + container.position.x,
+            y: parent.y + container.position.y,
           });
         },
         text: (text) => {
-          text.container.x = parent.x + text.container.x;
-          text.container.y = parent.y + text.container.y;
+          text.position.x = parent.x + text.position.x;
+          text.position.y = parent.y + text.position.y;
           if (DEBUG) {
-            println(
-              text.component.type + ': ' + JSON.stringify(text.container),
-            );
+            println(text.type + ': ' + JSON.stringify(text));
           } else {
             renderMarginBorderPadding(text, parent);
 
             drawText(text, {
               x:
-                text.container.x +
-                text.container.margin +
-                text.container.border +
-                text.container.padding,
+                text.position.x +
+                text.dimensions.margin +
+                text.dimensions.border +
+                text.dimensions.padding,
               y:
-                text.container.y +
-                text.container.margin +
-                text.container.border +
-                text.container.padding,
+                text.position.y +
+                text.dimensions.margin +
+                text.dimensions.border +
+                text.dimensions.padding,
             });
           }
         },
