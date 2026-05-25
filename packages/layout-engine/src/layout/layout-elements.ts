@@ -4,24 +4,39 @@ import { match } from 'match-discriminated-union';
 
 import { createDimensions } from './dimensions';
 import { LayoutRoot } from './root-layout';
+import { Position } from './position';
 
 export const manageChildren = <T extends LayoutContainer | LayoutRoot>(
   container: T,
 ): { container: T; addChild: (child: UefiElement) => void } => {
   const addChild = (child: UefiElement) => {
-    const layoutElement = calculateElement(child, container.position.z + 1);
+    const childPosition: Position = match(
+      container.containerOptions,
+      'orientation',
+      {
+        column: () => ({
+          x: container.position.x,
+          y: container.position.y + container.dimensions.height,
+          z: container.position.z + 1,
+        }),
+        row: () => ({
+          x: container.position.x + container.dimensions.width,
+          y: container.position.y,
+          z: container.position.z + 1,
+        }),
+      },
+    );
+    const layoutElement = calculateElementContent(child, childPosition);
     match(container.containerOptions, 'orientation', {
       column: () => {
-        layoutElement.position.y = container.dimensions.height;
         container.dimensions.height =
-          container.dimensions.height + layoutElement.dimensions.totalWidth;
+          container.dimensions.height + layoutElement.dimensions.totalHeight;
 
         if (layoutElement.dimensions.width > container.dimensions.width) {
           container.dimensions.width = layoutElement.dimensions.width;
         }
       },
       row: () => {
-        layoutElement.position.x = container.dimensions.width;
         container.dimensions.width =
           container.dimensions.width + layoutElement.dimensions.totalWidth;
 
@@ -37,15 +52,11 @@ export const manageChildren = <T extends LayoutContainer | LayoutRoot>(
 
 const createContainer = (
   elmProps: Extract<UefiElement, { children: UefiElement[] }>['props'],
-  recursionDepth: number,
+  position: Position,
 ): LayoutContainer => ({
   type: 'container',
   dimensions: createDimensions(elmProps.style),
-  position: {
-    x: 0,
-    y: 0,
-    z: recursionDepth,
-  },
+  position,
   containerOptions: {
     alignItems: 'start',
     justifyContent: 'start',
@@ -58,10 +69,10 @@ const createContainer = (
 
 const calculateBox = (
   element: Extract<UefiElement, { children: UefiElement[] }>,
-  recursionDepth: number,
+  position: Position,
 ): LayoutContainer => {
   const { container, addChild } = manageChildren(
-    createContainer(element.props, recursionDepth),
+    createContainer(element.props, position),
   );
 
   element.children.forEach((elm) => {
@@ -73,7 +84,7 @@ const calculateBox = (
 
 const calculateText = (
   element: Extract<UefiElement, { type: 'text' }>,
-  recursionDepth: number,
+  position: Position,
 ): Extract<LayoutElement, { type: 'text' }> => {
   return {
     type: 'text',
@@ -83,21 +94,17 @@ const calculateText = (
       height: element.props.style?.height ?? 19,
       width: element.props.style?.width ?? element.props.text.length * 8,
     }),
-    position: {
-      x: 0,
-      y: 0,
-      z: recursionDepth,
-    },
+    position,
     componentProps: element.props,
   };
 };
 
-export const calculateElement = (
+export const calculateElementContent = (
   element: UefiElement,
-  recursionDepth: number,
+  position: Position,
 ): LayoutElement => {
   return match(element, 'type', {
-    box: (box) => calculateBox(box, recursionDepth),
-    text: (text) => calculateText(text, recursionDepth),
+    box: (box) => calculateBox(box, position),
+    text: (text) => calculateText(text, position),
   });
 };

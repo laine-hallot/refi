@@ -6,7 +6,7 @@ import { match } from 'match-discriminated-union';
 import { calculateRoot } from './layout';
 import { clearScreen, drawRectangle, drawText } from './uefi-graphics';
 
-const DEBUG = true;
+const DEBUG = false;
 
 const renderMarginBorderPadding = (
   layout: LayoutRoot | LayoutElement,
@@ -60,10 +60,9 @@ const renderBox = (
   parent: { x: number; y: number },
 ): void => {
   if (DEBUG) {
-    println(layout.type + ': ' + JSON.stringify(layout));
+    const { dimensions, position } = layout;
+    println(`${layout.type}: ${JSON.stringify({ dimensions, position })}\n`);
   } else {
-    layout.position.x = parent.x + layout.position.x;
-    layout.position.y = parent.y + layout.position.y;
     renderMarginBorderPadding(layout, parent);
     // content rectangle
     drawRectangle(
@@ -85,10 +84,15 @@ const renderBox = (
           });
         },
         text: (text) => {
-          text.position.x = parent.x + text.position.x;
-          text.position.y = parent.y + text.position.y;
           if (DEBUG) {
-            println(text.type + ': ' + JSON.stringify(text));
+            const { dimensions, position, componentProps } = text;
+            println(
+              `${text.type}: ${JSON.stringify({
+                dimensions,
+                position,
+                text: componentProps.text,
+              })}\n`,
+            );
           } else {
             renderMarginBorderPadding(text, parent);
 

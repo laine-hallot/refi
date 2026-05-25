@@ -34,12 +34,21 @@ const createLayoutRoot = (elmProps: RootElement['props']): LayoutRoot => ({
 });
 
 export const calculateRoot = (root: RootElement): LayoutRoot => {
-  const { container, addChild } = manageChildren(createLayoutRoot(root.props));
+  const { container, addChild } = manageChildren(
+    createLayoutRoot({
+      ...root.props,
+      style: { ...root.props.style, width: 0, height: 0 },
+    }),
+  );
 
   root.children.forEach((elm) => {
     addChild(elm);
   });
-  console.log(container.children);
+
+  container.dimensions.height =
+    root.props.style?.height ?? container.dimensions.height;
+  container.dimensions.width =
+    root.props.style?.width ?? container.dimensions.width;
 
   return container;
 };
