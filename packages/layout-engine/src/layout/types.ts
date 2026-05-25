@@ -36,3 +36,6 @@ export type LayoutContainer = LayoutElmBase & {
   children: LayoutElement[];
   componentProps: Extract<UefiElement, { children: UefiElement[] }>['props'];
 };
+
+export type LayoutLayer = LayoutElement[];
+export type Layout = { layers: LayoutLayer[] };

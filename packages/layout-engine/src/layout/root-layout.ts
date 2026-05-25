@@ -1,7 +1,6 @@
 import type { RootElement } from '../types';
-import type { LayoutElement } from './types';
+import type { Layout, LayoutElement, LayoutElmBase } from './types';
 
-import { LayoutElmBase } from './types';
 import { manageChildren } from './layout-elements';
 import { createDimensions } from './dimensions';
 
@@ -33,7 +32,8 @@ const createLayoutRoot = (elmProps: RootElement['props']): LayoutRoot => ({
   children: [],
 });
 
-export const calculateRoot = (root: RootElement): LayoutRoot => {
+export const calculateRoot = (root: RootElement): [LayoutRoot, Layout] => {
+  const layout = { layers: [] };
   const { container, addChild } = manageChildren(
     createLayoutRoot({
       ...root.props,
@@ -42,7 +42,7 @@ export const calculateRoot = (root: RootElement): LayoutRoot => {
   );
 
   root.children.forEach((elm) => {
-    addChild(elm);
+    addChild(elm, layout);
   });
 
   container.dimensions.height =
@@ -50,5 +50,5 @@ export const calculateRoot = (root: RootElement): LayoutRoot => {
   container.dimensions.width =
     root.props.style?.width ?? container.dimensions.width;
 
-  return container;
+  return [container, layout];
 };

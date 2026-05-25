@@ -1,4 +1,4 @@
-import type { LayoutContainer, LayoutElement } from './types';
+import type { Layout, LayoutContainer, LayoutElement } from './types';
 import type { UefiElement } from '../types';
 import { match } from 'match-discriminated-union';
 
@@ -8,8 +8,8 @@ import { Position } from './position';
 
 export const manageChildren = <T extends LayoutContainer | LayoutRoot>(
   container: T,
-): { container: T; addChild: (child: UefiElement) => void } => {
-  const addChild = (child: UefiElement) => {
+): { container: T; addChild: (child: UefiElement, layout: Layout) => void } => {
+  const addChild = (child: UefiElement, layout: Layout) => {
     const childPosition: Position = match(
       container.containerOptions,
       'orientation',
@@ -26,7 +26,7 @@ export const manageChildren = <T extends LayoutContainer | LayoutRoot>(
         }),
       },
     );
-    const layoutElement = calculateElementContent(child, childPosition);
+    const layoutElement = calculateElementContent(child, childPosition, layout);
     match(container.containerOptions, 'orientation', {
       column: () => {
         container.dimensions.height =
@@ -70,14 +70,20 @@ const createContainer = (
 const calculateBox = (
   element: Extract<UefiElement, { children: UefiElement[] }>,
   position: Position,
+  layout: Layout,
 ): LayoutContainer => {
   const { container, addChild } = manageChildren(
     createContainer(element.props, position),
   );
 
   element.children.forEach((elm) => {
-    addChild(elm);
+    addChild(elm, layout);
   });
+
+  if (layout.layers[container.position.z] === undefined) {
+    layout.layers[container.position.z] = [];
+  }
+  layout.layers[container.position.z].push(container);
 
   return container;
 };
@@ -85,9 +91,10 @@ const calculateBox = (
 const calculateText = (
   element: Extract<UefiElement, { type: 'text' }>,
   position: Position,
+  layout: Layout,
 ): Extract<LayoutElement, { type: 'text' }> => {
-  return {
-    type: 'text',
+  const layoutElement = {
+    type: 'text' as const,
     dimensions: createDimensions({
       ...element.props.style,
       // assume single line text
@@ -97,14 +104,21 @@ const calculateText = (
     position,
     componentProps: element.props,
   };
+
+  if (layout.layers[layoutElement.position.z] === undefined) {
+    layout.layers[layoutElement.position.z] = [];
+  }
+  layout.layers[layoutElement.position.z].push(layoutElement);
+  return layoutElement;
 };
 
 export const calculateElementContent = (
   element: UefiElement,
   position: Position,
+  layout: Layout,
 ): LayoutElement => {
   return match(element, 'type', {
-    box: (box) => calculateBox(box, position),
-    text: (text) => calculateText(text, position),
+    box: (box) => calculateBox(box, position, layout),
+    text: (text) => calculateText(text, position, layout),
   });
 };

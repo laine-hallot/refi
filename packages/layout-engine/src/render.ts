@@ -10,7 +10,6 @@ const DEBUG = false;
 
 const renderMarginBorderPadding = (
   layout: LayoutRoot | LayoutElement,
-  parent: { x: number; y: number },
 ): void => {
   // margin rectangle
   drawRectangle(
@@ -55,33 +54,38 @@ const renderMarginBorderPadding = (
   );
 };
 
-const renderBox = (
-  layout: LayoutRoot | LayoutElement,
-  parent: { x: number; y: number },
-): void => {
+const renderBox = (layout: LayoutRoot | LayoutElement): void => {
   if (DEBUG) {
     const { dimensions, position } = layout;
     println(`${layout.type}: ${JSON.stringify({ dimensions, position })}\n`);
   } else {
-    renderMarginBorderPadding(layout, parent);
+    renderMarginBorderPadding(layout);
     // content rectangle
     drawRectangle(
       layout.componentProps.style?.bgColor ?? { r: 0, g: 0, b: 0, a: 0 },
-      { x: parent.x + layout.position.x, y: parent.y + layout.position.y },
+      layout.position,
       {
         width: layout.dimensions.width,
         height: layout.dimensions.height,
       },
     );
   }
-  if (layout.type === 'container') {
-    layout.children.forEach((child) => {
-      match(child, 'type', {
+};
+
+export const render = (root: RootElement): void => {
+  if (DEBUG) {
+    efi.SystemTable.ConOut.ClearScreen();
+  } else {
+    clearScreen();
+  }
+
+  const [_layoutRoot, layout] = calculateRoot(root);
+  //renderBox(layout, { x: 0, y: 0 });
+  layout.layers.forEach((layer) => {
+    layer.forEach((elm) => {
+      match(elm, 'type', {
         container: (container) => {
-          renderBox(container, {
-            x: parent.x + container.position.x,
-            y: parent.y + container.position.y,
-          });
+          renderBox(container);
         },
         text: (text) => {
           if (DEBUG) {
@@ -94,7 +98,7 @@ const renderBox = (
               })}\n`,
             );
           } else {
-            renderMarginBorderPadding(text, parent);
+            renderMarginBorderPadding(text);
 
             drawText(text, {
               x:
@@ -112,16 +116,5 @@ const renderBox = (
         },
       });
     });
-  }
-};
-
-export const render = (root: RootElement): void => {
-  if (DEBUG) {
-    efi.SystemTable.ConOut.ClearScreen();
-  } else {
-    clearScreen();
-  }
-
-  const layout = calculateRoot(root);
-  renderBox(layout, { x: 0, y: 0 });
+  });
 };
