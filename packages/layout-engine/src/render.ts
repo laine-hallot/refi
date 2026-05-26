@@ -3,8 +3,8 @@ import type { LayoutElement, LayoutRoot } from './layout';
 
 import { match } from 'match-discriminated-union';
 
+import { EfiFontInfoMask, EfiHiiFontStyle } from '@refi/runtime';
 import { calculateRoot } from './layout';
-import { clearScreen, drawRectangle, drawText } from './uefi-graphics';
 
 const DEBUG = false;
 
@@ -12,7 +12,7 @@ const renderMarginBorderPadding = (
   layout: LayoutRoot | LayoutElement,
 ): void => {
   // margin rectangle
-  drawRectangle(
+  refiGraphics.drawRectangle(
     { r: 0, g: 0, b: 0, a: 0 },
     { x: layout.position.x, y: layout.position.y },
     {
@@ -21,7 +21,7 @@ const renderMarginBorderPadding = (
     },
   );
   // border rectangle
-  drawRectangle(
+  refiGraphics.drawRectangle(
     { r: 255, g: 255, b: 255, a: 255 },
     {
       x: layout.position.x + layout.dimensions.margin,
@@ -39,7 +39,7 @@ const renderMarginBorderPadding = (
     },
   );
   // padding rectangle
-  drawRectangle(
+  refiGraphics.drawRectangle(
     { r: 0, g: 0, b: 0, a: 0 },
     {
       x:
@@ -61,7 +61,7 @@ const renderBox = (layout: LayoutRoot | LayoutElement): void => {
   } else {
     renderMarginBorderPadding(layout);
     // content rectangle
-    drawRectangle(
+    refiGraphics.drawRectangle(
       layout.componentProps.style?.bgColor ?? { r: 0, g: 0, b: 0, a: 0 },
       layout.position,
       {
@@ -75,12 +75,12 @@ const renderBox = (layout: LayoutRoot | LayoutElement): void => {
 export const render = (root: RootElement): void => {
   if (DEBUG) {
     efi.SystemTable.ConOut.ClearScreen();
-  } else {
-    clearScreen();
   }
 
-  const [_layoutRoot, layout] = calculateRoot(root);
+  const [layoutRoot, layout] = calculateRoot(root);
   //renderBox(layout, { x: 0, y: 0 });
+  refiGraphics.clearFrame();
+  renderBox(layoutRoot);
   layout.layers.forEach((layer) => {
     layer.forEach((elm) => {
       match(elm, 'type', {
@@ -100,21 +100,40 @@ export const render = (root: RootElement): void => {
           } else {
             renderMarginBorderPadding(text);
 
-            drawText(text, {
-              x:
-                text.position.x +
-                text.dimensions.margin +
-                text.dimensions.border +
-                text.dimensions.padding,
-              y:
-                text.position.y +
-                text.dimensions.margin +
-                text.dimensions.border +
-                text.dimensions.padding,
-            });
+            refiGraphics.drawText(
+              text.componentProps.text,
+              {
+                BackgroundColor: text.componentProps.style?.bgColor ?? {
+                  r: 0,
+                  g: 0,
+                  b: 0,
+                  a: 0,
+                },
+                ForegroundColor: { r: 255, g: 255, b: 255, a: 255 },
+                FontInfoMask: [EfiFontInfoMask.EfiFontInfoSysFont],
+                FontInfo: {
+                  fontStyle: EfiHiiFontStyle.EfiHiiFontStyleNormal,
+                  fontSize: 16,
+                  FontName: '',
+                },
+              },
+              {
+                x:
+                  text.position.x +
+                  text.dimensions.margin +
+                  text.dimensions.border +
+                  text.dimensions.padding,
+                y:
+                  text.position.y +
+                  text.dimensions.margin +
+                  text.dimensions.border +
+                  text.dimensions.padding,
+              },
+            );
           }
         },
       });
     });
   });
+  refiGraphics.commitFrame();
 };
