@@ -1,14 +1,8 @@
 {
   "extends": "../../common.tsconfig.json",
   "compilerOptions": {
-    "outDir": "./dist",
+    "outDir": "./dist"
   },
-  "include": [
-    "./src/"
-  ],
-  "files": [
-    "index.ts",
-    "runtime.d.ts",
-    "./external/promethee/types.ts"
-  ]
+  "include": ["./src/"],
+  "files": ["index.ts", "runtime.d.ts", "./external/promethee/types.ts"]
 }

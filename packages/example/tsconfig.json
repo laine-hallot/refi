@@ -3,12 +3,8 @@
   "compilerOptions": {
     "jsx": "react-jsx",
     "jsxImportSource": "@refi/uefi-react/refi",
-    "outDir": "./dist",
+    "outDir": "./dist"
   },
-  "include": [
-    "./src/"
-  ],
-  "files": [
-    "src/main.ts"
-  ]
+  "include": ["./src/"],
+  "files": ["src/main.ts"]
 }
