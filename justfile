@@ -13,7 +13,11 @@ refi-build-example:
     #!/usr/bin/env bash
     npm -w packages/example run build
 
+refi-type-check:
+    npx tsc -b
+
 refi-build-js:
+    just refi-type-check
     just refi-build-example
 
 init:
