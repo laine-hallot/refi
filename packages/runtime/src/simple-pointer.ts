@@ -1,3 +1,4 @@
+/*
 import type {
   SimplePointer,
   SimplePointerMode,
@@ -60,3 +61,4 @@ setInterval(() => {
 }, 8);
 
 export default { pointer, mode, registerListener };
+*/

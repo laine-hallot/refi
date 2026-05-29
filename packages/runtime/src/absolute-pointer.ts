@@ -1,3 +1,4 @@
+/*
 import type {
   AbsolutePointer,
   AbsolutePointerMode,
@@ -36,3 +37,4 @@ setInterval(() => {
 }, 8);
 
 export default { pointer, mode };
+*/
