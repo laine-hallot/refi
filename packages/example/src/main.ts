@@ -7,13 +7,4 @@ import { App } from './App';
 const root = createRoot({});
 root.updateRoot(React.createElement(App));
 
-let iters = 0;
-try {
-  while (__host.hasWork()) {
-    __host.tick();
-  }
-} catch (e) {
-  console.error('error on iteration: ' + iters);
-  console.error(e);
-}
-println('done after ' + iters + ' iterations');
+println('done');
