@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useGlobalKeyboard } from '@refi/uefi-react';
 import { CharCodes, ScanCodes } from '@refi/runtime';
 
-const Thing: FC<{}> = ({}) => {
+const Thing: FC<{}> = ({ }) => {
   return (
     <box orientation="row">
       <text text="Testing non-intrinsics 1" />
@@ -65,7 +65,7 @@ export function App() {
   });
 
   return (
-    <box orientation="column" separator={true}>
+    <box orientation="column" separator={true} style={{ gap: 8 }}>
       <text style={{ border: 1 }} text={'tick ' + count} />
       <text
         style={{ border: 1, margin: 8, padding: 16 }}
@@ -78,7 +78,7 @@ export function App() {
         style={{ border: 1 }}
         text="omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam."
       />
-      <box separator={true}>
+      <box separator={true} style={{ gap: 16 }}>
         <text text="testing" />
         <text text="hiiiiii" />
         <box>

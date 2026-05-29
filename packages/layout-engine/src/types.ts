@@ -18,7 +18,9 @@ export type BoxElement = {
   props: BaseProps & {
     orientation?: 'row' | 'column';
     separator?: boolean;
-    gap?: number;
+    style?: {
+      gap?: number;
+    };
   };
   children: UefiElement[];
 };

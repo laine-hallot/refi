@@ -6,21 +6,37 @@ import { createDimensions } from './dimensions';
 import { LayoutRoot } from './root-layout';
 import { Position } from './position';
 
+const calculateGap = (
+  childrenLength: number,
+  containerOptions: (LayoutContainer | LayoutRoot)['containerOptions'],
+) => {
+  if (childrenLength <= 0) {
+    return 0;
+  } else {
+    return 'gap' in containerOptions ? containerOptions.gap : 0;
+  }
+};
+
 export const manageChildren = <T extends LayoutContainer | LayoutRoot>(
   container: T,
 ): { container: T; addChild: (child: UefiElement, layout: Layout) => void } => {
   const addChild = (child: UefiElement, layout: Layout) => {
+    const gap = calculateGap(
+      container.children.length,
+      container.containerOptions,
+    );
+
     const childPosition: Position = match(
       container.containerOptions,
       'orientation',
       {
         column: () => ({
           x: container.position.x,
-          y: container.position.y + container.dimensions.height,
+          y: container.position.y + container.dimensions.height + gap,
           z: container.position.z + 1,
         }),
         row: () => ({
-          x: container.position.x + container.dimensions.width,
+          x: container.position.x + container.dimensions.width + gap,
           y: container.position.y,
           z: container.position.z + 1,
         }),
@@ -30,7 +46,9 @@ export const manageChildren = <T extends LayoutContainer | LayoutRoot>(
     match(container.containerOptions, 'orientation', {
       column: () => {
         container.dimensions.height =
-          container.dimensions.height + layoutElement.dimensions.totalHeight;
+          container.dimensions.height +
+          layoutElement.dimensions.totalHeight +
+          gap;
 
         if (layoutElement.dimensions.width > container.dimensions.width) {
           container.dimensions.width = layoutElement.dimensions.width;
@@ -38,7 +56,9 @@ export const manageChildren = <T extends LayoutContainer | LayoutRoot>(
       },
       row: () => {
         container.dimensions.width =
-          container.dimensions.width + layoutElement.dimensions.totalWidth;
+          container.dimensions.width +
+          layoutElement.dimensions.totalWidth +
+          gap;
 
         if (layoutElement.dimensions.height > container.dimensions.height) {
           container.dimensions.height = layoutElement.dimensions.height;
@@ -61,7 +81,7 @@ const createContainer = (
     alignItems: 'start',
     justifyContent: 'start',
     orientation: elmProps.orientation ?? 'row',
-    gap: elmProps.gap ?? 0,
+    gap: elmProps.style?.gap ?? 0,
   },
   componentProps: elmProps,
   children: [],
