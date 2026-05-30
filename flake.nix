@@ -32,6 +32,7 @@
             gnumake
             binutils
             nasm
+            bear
 
             just
 

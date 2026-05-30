@@ -1,3 +1,8 @@
+promethee-gen-compile-commands:
+    #!/usr/bin/env bash
+    cd packages/runtime/external/promethee
+    bear -- make
+
 promethee-init:
     #!/usr/bin/env bash
     cd packages/runtime/external/promethee && ./get-deps;
