@@ -78,9 +78,9 @@ const createContainer = (
   dimensions: createDimensions(elmProps.style),
   position,
   containerOptions: {
-    alignItems: 'start',
-    justifyContent: 'start',
-    orientation: elmProps.orientation ?? 'row',
+    alignItems: elmProps.style?.alignItems ?? 'start',
+    justifyContent: elmProps.style?.justifyContent ?? 'start',
+    orientation: elmProps.style?.orientation ?? 'row',
     gap: elmProps.style?.gap ?? 0,
   },
   component: { type: 'box', props: elmProps },

@@ -1,4 +1,5 @@
-import type { FC, BaseProps, KeyPressEvent } from '@refi/uefi-react';
+import type { FC, BaseProps } from '@refi/uefi-react';
+import type { KeyPressEvent } from '@refi/runtime';
 
 import React, { useCallback, useEffect, useState } from 'react';
 import { useGlobalKeyboard, } from '@refi/uefi-react';
@@ -6,7 +7,7 @@ import { CharCodes, ScanCodes, refiPointer } from '@refi/runtime';
 
 const Thing: FC<{}> = ({ }) => {
   return (
-    <box orientation="row">
+    <box style={{ orientation: "row" }}>
       <text text="Testing non-intrinsics 1" />
     </box>
   );
@@ -48,16 +49,8 @@ export function App() {
     return () => clearInterval(id);
   }, []);
 
-  const [pointerState, setPointerState] = useState<any>({
-    currentX: 0,
-    currentY: 0,
-    currentZ: 0,
-    leftButton: false,
-    rightButton: false,
-  });
-
   return (
-    <box orientation="column" style={{ gap: 8 }}>
+    <box style={{ gap: 8, orientation: "column", alignItems: "start" }}>
       <text
         text="Hiiiiiiiiiiiii"
       />
@@ -82,14 +75,14 @@ export function App() {
         </box>
       </box>
       <text style={{ border: 1, margin: 8, padding: 16 }} text="I have margins borders and padding" />
-      <box orientation='row'>
+      <box style={{ orientation: "row" }}>
         <text text="Unfocused input: " />
         <TextInput />
       </box>
-      <box orientation='row'>
+      <box style={{ orientation: "row" }}>
         <text text="Focused input: " />
         <TextInput />
       </box>
-    </box>
+    </box >
   );
 }

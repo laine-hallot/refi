@@ -14,10 +14,11 @@ export type BaseProps = {
 };
 
 export type BoxProps = BaseProps & {
-  orientation?: 'row' | 'column';
-  separator?: boolean;
   style?: {
     gap?: number;
+    orientation?: 'row' | 'column';
+    alignItems?: 'start';
+    justifyContent?: 'start';
   };
 };
 export type Box = {
