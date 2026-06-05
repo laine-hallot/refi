@@ -3,6 +3,13 @@
   "compilerOptions": {
     "outDir": "./dist"
   },
-  "include": ["./src/"],
-  "files": ["index.ts", "runtime.d.ts", "./external/promethee/types.ts"]
+  "include": [
+    "./src/"
+  ],
+  "files": [
+    "index.ts",
+    "runtime.d.ts",
+    "./external/promethee/types.ts",
+    "./external/promethee/constants.ts"
+  ]
 }
