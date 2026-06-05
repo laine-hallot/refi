@@ -13,23 +13,27 @@ export type BaseProps = {
   style?: Style;
 };
 
-export type BoxElement = {
-  type: 'box';
-  props: BaseProps & {
-    orientation?: 'row' | 'column';
-    separator?: boolean;
-    style?: {
-      gap?: number;
-    };
+export type BoxProps = BaseProps & {
+  orientation?: 'row' | 'column';
+  separator?: boolean;
+  style?: {
+    gap?: number;
   };
+};
+export type Box = {
+  type: 'box';
+  props: BoxProps;
   children: UefiElement[];
 };
-export type TextElement = {
+
+export type TextProps = BaseProps & { text: string };
+
+export type Text = {
   type: 'text';
-  props: BaseProps & { text: string };
+  props: TextProps;
 };
-export type UefiElement = BoxElement | TextElement;
-export type ElementTypes = UefiElement['type'];
+
+export type UefiElement = Box | Text;
 
 export type RootElement = {
   type: 'root';

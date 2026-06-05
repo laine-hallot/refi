@@ -1,5 +1,5 @@
-import type { RootElement } from './types';
-import type { LayoutElement, LayoutRoot } from './layout';
+import type { RootElement, Text } from './types';
+import type { LayoutElement, LayoutRoot, LayoutItem } from './layout';
 
 import { match } from 'match-discriminated-union';
 
@@ -40,7 +40,7 @@ const renderMarginBorderPadding = (
   );
   // padding rectangle
   refiGraphics.drawRectangle(
-    { r: 0, g: 0, b: 0, a: 0 },
+    layout.component.props.style?.bgColor ?? { r: 0, g: 0, b: 0, a: 0 },
     {
       x:
         layout.position.x + layout.dimensions.margin + layout.dimensions.border,
@@ -62,11 +62,55 @@ const renderBox = (layout: LayoutRoot | LayoutElement): void => {
     renderMarginBorderPadding(layout);
     // content rectangle
     refiGraphics.drawRectangle(
-      layout.componentProps.style?.bgColor ?? { r: 0, g: 0, b: 0, a: 0 },
+      layout.component.props.style?.bgColor ?? { r: 0, g: 0, b: 0, a: 0 },
       layout.position,
       {
         width: layout.dimensions.width,
         height: layout.dimensions.height,
+      },
+    );
+  }
+};
+
+const renderText = (item: LayoutItem & { component: Text }) => {
+  if (DEBUG) {
+    const { dimensions, position, component } = item;
+    println(
+      `${item.type}: ${JSON.stringify({
+        dimensions,
+        position,
+        text: component.props.text,
+      })}\n`,
+    );
+  } else {
+    refiGraphics.drawText(
+      item.component.props.text,
+      {
+        BackgroundColor: item.component.props.style?.bgColor ?? {
+          r: 0,
+          g: 0,
+          b: 0,
+          a: 0,
+        },
+        ForegroundColor: { r: 255, g: 255, b: 255, a: 255 },
+        FontInfoMask: [EfiFontInfoMask.EfiFontInfoSysFont],
+        FontInfo: {
+          fontStyle: EfiHiiFontStyle.EfiHiiFontStyleNormal,
+          fontSize: 16,
+          FontName: '',
+        },
+      },
+      {
+        x:
+          item.position.x +
+          item.dimensions.margin +
+          item.dimensions.border +
+          item.dimensions.padding,
+        y:
+          item.position.y +
+          item.dimensions.margin +
+          item.dimensions.border +
+          item.dimensions.padding,
       },
     );
   }
@@ -87,50 +131,9 @@ export const render = (root: RootElement): void => {
         container: (container) => {
           renderBox(container);
         },
-        text: (text) => {
-          if (DEBUG) {
-            const { dimensions, position, componentProps } = text;
-            println(
-              `${text.type}: ${JSON.stringify({
-                dimensions,
-                position,
-                text: componentProps.text,
-              })}\n`,
-            );
-          } else {
-            renderMarginBorderPadding(text);
-
-            refiGraphics.drawText(
-              text.componentProps.text,
-              {
-                BackgroundColor: text.componentProps.style?.bgColor ?? {
-                  r: 0,
-                  g: 0,
-                  b: 0,
-                  a: 0,
-                },
-                ForegroundColor: { r: 255, g: 255, b: 255, a: 255 },
-                FontInfoMask: [EfiFontInfoMask.EfiFontInfoSysFont],
-                FontInfo: {
-                  fontStyle: EfiHiiFontStyle.EfiHiiFontStyleNormal,
-                  fontSize: 16,
-                  FontName: '',
-                },
-              },
-              {
-                x:
-                  text.position.x +
-                  text.dimensions.margin +
-                  text.dimensions.border +
-                  text.dimensions.padding,
-                y:
-                  text.position.y +
-                  text.dimensions.margin +
-                  text.dimensions.border +
-                  text.dimensions.padding,
-              },
-            );
-          }
+        item: (item) => {
+          renderMarginBorderPadding(item);
+          renderText(item as LayoutItem & { component: Text });
         },
       });
     });

@@ -6,7 +6,7 @@ import { createDimensions } from './dimensions';
 
 export type LayoutRoot = LayoutElmBase & {
   type: 'container';
-  componentProps: RootElement['props'];
+  component: { type: 'root'; props: RootElement['props'] };
   children: LayoutElement[];
   containerOptions: {
     orientation: 'row';
@@ -28,7 +28,7 @@ const createLayoutRoot = (elmProps: RootElement['props']): LayoutRoot => ({
     justifyContent: 'start',
     orientation: 'row',
   },
-  componentProps: elmProps,
+  component: { type: 'root', props: elmProps },
   children: [],
 });
 

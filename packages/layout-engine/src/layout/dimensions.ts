@@ -12,8 +12,8 @@ export type Dimensions = {
   margin: number;
   border: number;
   padding: number;
-  readonly totalWidth: number;
-  readonly totalHeight: number;
+  totalWidth: number;
+  totalHeight: number;
 };
 
 export const createDimensions = (

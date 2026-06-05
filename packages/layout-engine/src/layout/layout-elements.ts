@@ -83,7 +83,7 @@ const createContainer = (
     orientation: elmProps.orientation ?? 'row',
     gap: elmProps.style?.gap ?? 0,
   },
-  componentProps: elmProps,
+  component: { type: 'box', props: elmProps },
   children: [],
 });
 
@@ -108,13 +108,14 @@ const calculateBox = (
   return container;
 };
 
-const calculateText = (
-  element: Extract<UefiElement, { type: 'text' }>,
+const calculateItem = (
+  element: Exclude<UefiElement, { children: UefiElement[] }>,
   position: Position,
   layout: Layout,
-): Extract<LayoutElement, { type: 'text' }> => {
-  const layoutElement = {
-    type: 'text' as const,
+): Extract<LayoutElement, { type: 'item' }> => {
+  const layoutElement: Extract<LayoutElement, { type: 'item' }> = {
+    type: 'item' as const,
+    component: element,
     dimensions: createDimensions({
       ...element.props.style,
       // assume single line text
@@ -122,7 +123,6 @@ const calculateText = (
       width: element.props.style?.width ?? element.props.text.length * 8,
     }),
     position,
-    componentProps: element.props,
   };
 
   if (layout.layers[layoutElement.position.z] === undefined) {
@@ -139,6 +139,6 @@ export const calculateElementContent = (
 ): LayoutElement => {
   return match(element, 'type', {
     box: (box) => calculateBox(box, position, layout),
-    text: (text) => calculateText(text, position, layout),
+    text: (text) => calculateItem(text, position, layout),
   });
 };

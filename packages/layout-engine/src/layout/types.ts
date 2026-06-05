@@ -11,17 +11,16 @@ export type LayoutElmBase = {
   position: Position;
   dimensions: Dimensions;
 };
-
-export type LayoutText = {
-  type: 'text';
-  componentProps: Exclude<UefiElement, { children: UefiElement[] }>['props'];
+export type LayoutItem = {
+  type: 'item';
+  component: Exclude<UefiElement, { children: UefiElement[] }>;
 } & LayoutElmBase;
 
 type ToLayout<T extends UefiElement> = T extends {
   children: UefiElement[];
 }
   ? LayoutContainer
-  : LayoutText;
+  : LayoutItem;
 
 export type LayoutElement = ToLayout<UefiElement>;
 
@@ -34,7 +33,10 @@ export type LayoutContainer = LayoutElmBase & {
     gap: number;
   };
   children: LayoutElement[];
-  componentProps: Extract<UefiElement, { children: UefiElement[] }>['props'];
+  component: Pick<
+    Extract<UefiElement, { children: UefiElement[] }>,
+    'props' | 'type'
+  >;
 };
 
 export type LayoutLayer = LayoutElement[];

@@ -1,9 +1,11 @@
 export type {
-  BoxElement,
+  Box,
+  BoxProps,
   UefiElement,
-  ElementTypes,
   RootElement,
-  TextElement,
+  Text,
+  TextProps,
+  BaseProps,
 } from './types';
 
 export { calculateRoot } from './layout';
