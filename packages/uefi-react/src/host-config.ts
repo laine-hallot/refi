@@ -1,9 +1,9 @@
 import type {
-  BoxElement,
+  Box,
   UefiElement,
-  ElementTypes,
   RootElement,
-  TextElement,
+  Text,
+  Input,
 } from '@refi/layout-engine';
 
 import ReactReconciler, { ReactContext } from 'react-reconciler';
@@ -11,16 +11,31 @@ import { DefaultEventPriority } from 'react-reconciler/constants';
 import { match } from 'match-discriminated-union';
 
 import { render } from '@refi/layout-engine';
+import { EfiShiftStates } from '@refi/runtime';
+import { refiKeyDataToKeyEvent, toCode, toKey } from './input';
+
+export type ElementTypes = UefiElement['type'];
+export type ElementProps = UefiElement['props'];
 
 const hostContext = {};
 // @ts-expect-error -- Undocumented form API that I don't even think we need
 const hostTransitionContext: ReactContext<any> = {};
 
+type ToInstance<T> = T & {
+  __id: number;
+};
+
+type BoxIntance = ToInstance<Box>;
+type TextIntance = ToInstance<Text>;
+type InputIntance = ToInstance<Input>;
+
+type RefiIntance = BoxIntance | TextIntance | InputIntance;
+
 export const reconciler = ReactReconciler<
   ElementTypes,
-  TextElement['props'] | BoxElement['props'],
+  ElementProps,
   RootElement,
-  UefiElement,
+  RefiIntance,
   never,
   never,
   never,
@@ -32,8 +47,8 @@ export const reconciler = ReactReconciler<
   unknown,
   typeof hostTransitionContext
 >({
-  supportsMutation: false as const,
-  supportsPersistence: true as const,
+  supportsMutation: false,
+  supportsPersistence: true,
   startSuspendingCommit() {
     //println('startSuspendingCommit');
   },
@@ -48,9 +63,34 @@ export const reconciler = ReactReconciler<
     //println('createInstance', type);
     switch (type) {
       case 'text':
-        return { type: 'text', props } as TextElement;
+        return { __id: refi.createId(), type: 'text', props } as TextIntance;
       case 'box':
-        return { type: 'box', props, children: [] } as BoxElement;
+        return {
+          __id: refi.createId(),
+          type: 'box',
+          props,
+          children: [],
+        } as BoxIntance;
+      case 'input':
+        const id = refi.createId();
+        refi.setFocused(id);
+        if ('onKeyPress' in props) {
+          refiInput.addKbEvent({ id }, (event) => {
+            props.onKeyPress?.(refiKeyDataToKeyEvent(event));
+          });
+        }
+        return {
+          __id: id,
+          type: 'input',
+          props: {
+            ...props,
+            style: {
+              padding: 4,
+              bgColor: { r: 255, g: 255, b: 255, a: 255 },
+              ...(props.style ?? {}),
+            },
+          },
+        } as InputIntance;
       default:
         throw new Error('Unknown component: ' + type);
     }
@@ -185,6 +225,21 @@ export const reconciler = ReactReconciler<
           type,
           props: { ...oldProps, ...newProps },
           children: keepChildren ? box.children : [],
+        };
+      },
+      input: (input) => {
+        return {
+          type,
+          props: {
+            ...input.props,
+            ...oldProps,
+            ...newProps,
+            style: {
+              ...input.props.style,
+              ...oldProps.style,
+              ...newProps.style,
+            },
+          },
         };
       },
     });

@@ -1,4 +1,4 @@
-import type { BltPixel } from '@refi/runtime';
+import type { BltPixel, KeyPressEvent } from '@refi/runtime';
 
 export type Style = {
   width?: number;
@@ -33,7 +33,18 @@ export type Text = {
   props: TextProps;
 };
 
-export type UefiElement = Box | Text;
+export type InputProps = BaseProps & {
+  value: string;
+  placeholder?: string;
+  onKeyPress?: (event: KeyPressEvent) => void;
+};
+
+export type Input = {
+  type: 'input';
+  props: InputProps;
+};
+
+export type UefiElement = Box | Text | Input;
 
 export type RootElement = {
   type: 'root';

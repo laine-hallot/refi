@@ -1,4 +1,4 @@
-import type { RootElement, Text } from './types';
+import type { Input, RootElement, Text } from './types';
 import type { LayoutElement, LayoutRoot, LayoutItem } from './layout';
 
 import { match } from 'match-discriminated-union';
@@ -72,6 +72,49 @@ const renderBox = (layout: LayoutRoot | LayoutElement): void => {
   }
 };
 
+const renderInput = (item: LayoutItem & { component: Input }) => {
+  if (DEBUG) {
+    const { dimensions, position, component } = item;
+    println(
+      `${item.type}: ${JSON.stringify({
+        dimensions,
+        position,
+        text: component.props.value,
+      })}\n`,
+    );
+  } else {
+    refiGraphics.drawText(
+      item.component.props.value,
+      {
+        BackgroundColor: item.component.props.style?.bgColor ?? {
+          r: 255,
+          g: 255,
+          b: 255,
+          a: 255,
+        },
+        ForegroundColor: { r: 255, g: 0, b: 0, a: 0 },
+        FontInfoMask: [EfiFontInfoMask.EfiFontInfoSysFont],
+        FontInfo: {
+          fontStyle: EfiHiiFontStyle.EfiHiiFontStyleNormal,
+          fontSize: 16,
+          FontName: '',
+        },
+      },
+      {
+        x:
+          item.position.x +
+          item.dimensions.margin +
+          item.dimensions.border +
+          item.dimensions.padding,
+        y:
+          item.position.y +
+          item.dimensions.margin +
+          item.dimensions.border +
+          item.dimensions.padding,
+      },
+    );
+  }
+};
 const renderText = (item: LayoutItem & { component: Text }) => {
   if (DEBUG) {
     const { dimensions, position, component } = item;
@@ -133,7 +176,10 @@ export const render = (root: RootElement): void => {
         },
         item: (item) => {
           renderMarginBorderPadding(item);
-          renderText(item as LayoutItem & { component: Text });
+          match(item.component, 'type', {
+            input: () => renderInput(item as LayoutItem & { component: Input }),
+            text: () => renderText(item as LayoutItem & { component: Text }),
+          });
         },
       });
     });

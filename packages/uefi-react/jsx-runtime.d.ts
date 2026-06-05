@@ -1,4 +1,4 @@
-import type { BoxElement, TextElement, UefiElement } from '@refi/layout-engine';
+import type { Box, Input, Text, UefiElement } from '@refi/layout-engine';
 
 import type { UefiNode } from './src/types';
 
@@ -14,7 +14,8 @@ export namespace JSX {
   type jsxDEV = typeof jsx;
   type Element = UefiNode;
   type IntrinsicElements = {
-    box: Intrinsic<BoxElement>;
-    text: Intrinsic<TextElement>;
+    box: Intrinsic<Box>;
+    text: Intrinsic<Text>;
+    input: Intrinsic<Input>;
   };
 }

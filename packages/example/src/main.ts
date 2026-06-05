@@ -7,7 +7,7 @@ import { App } from './App';
 const root = createRoot({});
 root.updateRoot(React.createElement(App));
 
-refiInput.addKbEvent({ id: '' }, (event) => {
+refiInput.addKbEvent({ id: 0 }, (event) => {
   console.log(String.fromCharCode(event.key.unicodeChar));
 });
 

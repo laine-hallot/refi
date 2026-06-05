@@ -116,11 +116,21 @@ const calculateItem = (
   const layoutElement: Extract<LayoutElement, { type: 'item' }> = {
     type: 'item' as const,
     component: element,
-    dimensions: createDimensions({
-      ...element.props.style,
-      // assume single line text
-      height: element.props.style?.height ?? 19,
-      width: element.props.style?.width ?? element.props.text.length * 8,
+    dimensions: match(element, 'type', {
+      text: (textElm) =>
+        createDimensions({
+          ...textElm.props.style,
+          // assume single line text
+          height: textElm.props.style?.height ?? 19,
+          width: textElm.props.style?.width ?? textElm.props.text.length * 8,
+        }),
+      input: (input) =>
+        createDimensions({
+          ...input.props.style,
+          // assume single line text
+          height: input.props.style?.height ?? 19,
+          width: input.props.style?.width ?? input.props.value.length * 8,
+        }),
     }),
     position,
   };
@@ -140,5 +150,6 @@ export const calculateElementContent = (
   return match(element, 'type', {
     box: (box) => calculateBox(box, position, layout),
     text: (text) => calculateItem(text, position, layout),
+    input: (input) => calculateItem(input, position, layout),
   });
 };

@@ -5,6 +5,8 @@ export type {
   RootElement,
   Text,
   TextProps,
+  Input,
+  InputProps,
   BaseProps,
 } from './types';
 
