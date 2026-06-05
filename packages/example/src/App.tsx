@@ -1,6 +1,6 @@
-import type { FC } from '@refi/uefi-react';
+import type { FC, BaseProps, KeyPressEvent } from '@refi/uefi-react';
 
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useGlobalKeyboard, } from '@refi/uefi-react';
 import { CharCodes, ScanCodes, refiPointer } from '@refi/runtime';
 
@@ -12,41 +12,33 @@ const Thing: FC<{}> = ({ }) => {
   );
 };
 
-type r = ReturnType<typeof Thing>;
+const TextInput: FC<BaseProps & { defaultValue?: string }> = ({ defaultValue, style }) => {
+  const [inputValue, setInputValue] = useState(defaultValue ?? '');
+
+  const handleKeyPress = useCallback((value: KeyPressEvent) => {
+    if (value.code === 'Backspace') {
+      setInputValue((oldValue) => {
+        return oldValue.slice(0, oldValue.length - 1);
+      });
+    }
+    else {
+      setInputValue((oldValue) => {
+        return oldValue + value.key;
+      });
+    }
+  }, [setInputValue]);
+
+  return (
+    <input
+      value={inputValue}
+      onKeyPress={handleKeyPress}
+      style={style}
+    />
+  );
+}
 
 export function App() {
   const [count, setCount] = useState(0);
-  useEffect(() => {
-    const { unsubscribe } = useGlobalKeyboard(
-      {
-        key: {
-          scanCode: ScanCodes.ScanUp,
-          unicodeChar: CharCodes.CharNull,
-        },
-        keyState: { keyShiftState: 0, keyToggleState: 0 },
-      },
-      (keyData) => {
-        setCount((c) => c + 1);
-      },
-    );
-    const { unsubscribe: unsubscribeDown } = useGlobalKeyboard(
-      {
-        key: {
-          scanCode: ScanCodes.ScanDown,
-          unicodeChar: CharCodes.CharNull,
-        },
-        keyState: { keyShiftState: 0, keyToggleState: 0 },
-      },
-      (keyData) => {
-        setCount((c) => c - 1);
-      },
-    );
-
-    return () => {
-      unsubscribe();
-      unsubscribeDown();
-    };
-  }, []);
   useEffect(() => {
     //console.log('App - setting timeout')
     const id = setInterval(() => {
@@ -65,25 +57,38 @@ export function App() {
   });
 
   return (
-    <box orientation="column" separator={true} style={{ gap: 8 }}>
-      <text style={{ border: 1 }} text={'tick ' + count} />
+    <box orientation="column" style={{ gap: 8 }}>
       <text
-        style={{ border: 1, margin: 8, padding: 16 }}
         text="Hiiiiiiiiiiiii"
       />
-      <Thing />
-      {undefined}
-      <text text={JSON.stringify(refiPointer)} />
       <text
         style={{ border: 1 }}
-        text="omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam."
+        text="Welcome to refi"
       />
-      <box separator={true} style={{ gap: 16 }}>
-        <text text="testing" />
-        <text text="hiiiiii" />
+      <text style={{ border: 1 }} text={`You've been here for ${count} seconds`} />
+      <Thing />
+      {undefined}
+      <box style={{ gap: 2, margin: 4 }}>
+        <text text="Your cursor position:" />
+        <text text={JSON.stringify(refiPointer)} />
+      </box>
+      <box style={{ gap: 16 }}>
+        <text style={{ border: 1 }} text="This" />
+        <text style={{ border: 1 }} text="is" />
+        <text style={{ border: 1 }} text="a" />
+        <text style={{ border: 1 }} text="row" />
         <box>
-          <text text="desu" />
+          <text text="^-^" />
         </box>
+      </box>
+      <text style={{ border: 1, margin: 8, padding: 16 }} text="I have margins borders and padding" />
+      <box orientation='row'>
+        <text text="Unfocused input: " />
+        <TextInput />
+      </box>
+      <box orientation='row'>
+        <text text="Focused input: " />
+        <TextInput />
       </box>
     </box>
   );
