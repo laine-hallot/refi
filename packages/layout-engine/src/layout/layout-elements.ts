@@ -31,13 +31,29 @@ export const manageChildren = <T extends LayoutContainer | LayoutRoot>(
       'orientation',
       {
         column: () => ({
-          x: container.position.x,
-          y: container.position.y + container.dimensions.height + gap,
+          x:
+            container.position.x +
+            container.dimensions.padding +
+            container.dimensions.border,
+          y:
+            container.position.y +
+            container.dimensions.height +
+            gap +
+            container.dimensions.padding +
+            container.dimensions.border,
           z: container.position.z + 1,
         }),
         row: () => ({
-          x: container.position.x + container.dimensions.width + gap,
-          y: container.position.y,
+          x:
+            container.position.x +
+            container.dimensions.width +
+            gap +
+            container.dimensions.padding +
+            container.dimensions.border,
+          y:
+            container.position.y +
+            container.dimensions.padding +
+            container.dimensions.border,
           z: container.position.z + 1,
         }),
       },
@@ -71,6 +87,7 @@ export const manageChildren = <T extends LayoutContainer | LayoutRoot>(
 };
 
 const createContainer = (
+  elmId: number,
   elmProps: Extract<UefiElement, { children: UefiElement[] }>['props'],
   position: Position,
 ): LayoutContainer => ({
@@ -83,7 +100,7 @@ const createContainer = (
     orientation: elmProps.style?.orientation ?? 'row',
     gap: elmProps.style?.gap ?? 0,
   },
-  component: { type: 'box', props: elmProps },
+  component: { __id: elmId, type: 'box', props: elmProps },
   children: [],
 });
 
@@ -93,7 +110,7 @@ const calculateBox = (
   layout: Layout,
 ): LayoutContainer => {
   const { container, addChild } = manageChildren(
-    createContainer(element.props, position),
+    createContainer(element.__id, element.props, position),
   );
 
   element.children.forEach((elm) => {

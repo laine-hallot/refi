@@ -6,7 +6,7 @@ import { createDimensions } from './dimensions';
 
 export type LayoutRoot = LayoutElmBase & {
   type: 'container';
-  component: { type: 'root'; props: RootElement['props'] };
+  component: Omit<RootElement, 'children'>;
   children: LayoutElement[];
   containerOptions: {
     orientation: 'row';
@@ -15,9 +15,9 @@ export type LayoutRoot = LayoutElmBase & {
   };
 };
 
-const createLayoutRoot = (elmProps: RootElement['props']): LayoutRoot => ({
+const createLayoutRoot = (root: RootElement): LayoutRoot => ({
   type: 'container',
-  dimensions: createDimensions(elmProps.style),
+  dimensions: createDimensions(root.props.style),
   position: {
     x: 0,
     y: 0,
@@ -28,7 +28,7 @@ const createLayoutRoot = (elmProps: RootElement['props']): LayoutRoot => ({
     justifyContent: 'start',
     orientation: 'row',
   },
-  component: { type: 'root', props: elmProps },
+  component: root,
   children: [],
 });
 
@@ -36,8 +36,11 @@ export const calculateRoot = (root: RootElement): [LayoutRoot, Layout] => {
   const layout = { layers: [] };
   const { container, addChild } = manageChildren(
     createLayoutRoot({
-      ...root.props,
-      style: { ...root.props.style, width: 0, height: 0 },
+      ...root,
+      props: {
+        ...root.props,
+        style: { ...root.props.style, width: 0, height: 0 },
+      },
     }),
   );
 

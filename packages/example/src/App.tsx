@@ -2,13 +2,27 @@ import type { FC, BaseProps } from '@refi/uefi-react';
 import type { KeyPressEvent } from '@refi/runtime';
 
 import React, { useCallback, useEffect, useState } from 'react';
-import { useGlobalKeyboard, } from '@refi/uefi-react';
-import { CharCodes, ScanCodes, refiPointer } from '@refi/runtime';
+import { refiPointer } from '@refi/runtime';
 
 const Thing: FC<{}> = ({ }) => {
   return (
     <box style={{ orientation: "row" }}>
-      <text text="Testing non-intrinsics 1" />
+      <text text="Testing non-intrinsics" />
+    </box>
+  );
+};
+
+const Counter: FC<{}> = ({ }) => {
+  const [count, setCount] = useState(0);
+  return (
+    <box style={{ orientation: "row", gap: 4 }}>
+      <box style={{ orientation: "row", border: 1, padding: 8 }}>
+        <text text="-1" onClick={() => { setCount((count) => count - 1) }} />
+      </box>
+      <text text={`${count}`} />
+      <box style={{ orientation: "row", border: 1, padding: 8 }}>
+        <text text="+1" onClick={() => { setCount((count) => count + 1) }} />
+      </box>
     </box>
   );
 };
@@ -33,6 +47,7 @@ const TextInput: FC<BaseProps & { defaultValue?: string }> = ({ defaultValue, st
     <input
       value={inputValue}
       onKeyPress={handleKeyPress}
+      onClick={(event) => { console.log(JSON.stringify(event)) }}
       style={style}
     />
   );
@@ -50,7 +65,7 @@ export function App() {
   }, []);
 
   return (
-    <box style={{ gap: 8, orientation: "column", alignItems: "start" }}>
+    <box style={{ gap: 8, orientation: "column", alignItems: "start", padding: 24, border: 2 }}>
       <text
         text="Hiiiiiiiiiiiii"
       />
@@ -68,8 +83,8 @@ export function App() {
       <box style={{ gap: 16 }}>
         <text style={{ border: 1 }} text="This" />
         <text style={{ border: 1 }} text="is" />
-        <text style={{ border: 1 }} text="a" />
-        <text style={{ border: 1 }} text="row" />
+        <text style={{ border: 1, bgColor: { r: 255, g: 0, b: 0, a: 255 } }} text="a" />
+        <text style={{ border: 1, bgColor: { r: 255, g: 255, b: 255, a: 64 } }} text="row" />
         <box>
           <text text="^-^" />
         </box>
@@ -83,6 +98,7 @@ export function App() {
         <text text="Focused input: " />
         <TextInput />
       </box>
+      <Counter />
     </box >
   );
 }

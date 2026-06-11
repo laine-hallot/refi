@@ -11,19 +11,16 @@ import { DefaultEventPriority } from 'react-reconciler/constants';
 import { match } from 'match-discriminated-union';
 
 import { render } from '@refi/layout-engine';
-import { EfiShiftStates } from '@refi/runtime';
-import { refiKeyDataToKeyEvent, toCode, toKey } from './input';
+import { refiKeyDataToKeyEvent } from '@refi/runtime';
 
 export type ElementTypes = UefiElement['type'];
-export type ElementProps = UefiElement['props'];
+export type ElementProps = UefiElement['props'] & { id: number };
 
 const hostContext = {};
 // @ts-expect-error -- Undocumented form API that I don't even think we need
 const hostTransitionContext: ReactContext<any> = {};
 
-type ToInstance<T> = T & {
-  __id: number;
-};
+type ToInstance<T> = T & { props: { id: number } };
 
 type BoxIntance = ToInstance<Box>;
 type TextIntance = ToInstance<Text>;
@@ -61,18 +58,27 @@ export const reconciler = ReactReconciler<
   },
   createInstance(type, props) {
     //println('createInstance', type);
+    const id = refi.createId();
+    if (props.onClick !== undefined) {
+      refiInput.addClickListener({ id }, (event) => {
+        props.onClick?.(event);
+      });
+    }
     switch (type) {
       case 'text':
-        return { __id: refi.createId(), type: 'text', props } as TextIntance;
+        return {
+          __id: id,
+          type: 'text',
+          props,
+        } as TextIntance;
       case 'box':
         return {
-          __id: refi.createId(),
+          __id: id,
           type: 'box',
           props,
           children: [],
         } as BoxIntance;
       case 'input':
-        const id = refi.createId();
         refi.setFocused(id);
         if ('onKeyPress' in props) {
           refiInput.addKeyboardListener({ id }, (event) => {
@@ -216,12 +222,14 @@ export const reconciler = ReactReconciler<
     return match(instance, 'type', {
       text: (text) => {
         return {
+          __id: instance.__id,
           type,
           props: { ...oldProps, ...newProps },
         };
       },
       box: (box) => {
         return {
+          __id: instance.__id,
           type,
           props: { ...oldProps, ...newProps },
           children: keepChildren ? box.children : [],
@@ -229,6 +237,7 @@ export const reconciler = ReactReconciler<
       },
       input: (input) => {
         return {
+          __id: instance.__id,
           type,
           props: {
             ...input.props,

@@ -1,4 +1,4 @@
-import type { BltPixel, KeyPressEvent } from '@refi/runtime';
+import type { BltPixel, EfiClickEvent, KeyPressEvent } from '@refi/runtime';
 
 export type Style = {
   width?: number;
@@ -11,6 +11,7 @@ export type Style = {
 
 export type BaseProps = {
   style?: Style;
+  onClick?: (event: EfiClickEvent) => void;
 };
 
 export type BoxProps = BaseProps & {
@@ -22,6 +23,7 @@ export type BoxProps = BaseProps & {
   };
 };
 export type Box = {
+  __id: number;
   type: 'box';
   props: BoxProps;
   children: UefiElement[];
@@ -30,6 +32,7 @@ export type Box = {
 export type TextProps = BaseProps & { text: string };
 
 export type Text = {
+  __id: number;
   type: 'text';
   props: TextProps;
 };
@@ -41,6 +44,7 @@ export type InputProps = BaseProps & {
 };
 
 export type Input = {
+  __id: number;
   type: 'input';
   props: InputProps;
 };
@@ -48,7 +52,10 @@ export type Input = {
 export type UefiElement = Box | Text | Input;
 
 export type RootElement = {
+  __id: number;
   type: 'root';
-  props: { style: { width?: number; height?: number; bgColor?: BltPixel } };
+  props: {
+    style: { width?: number; height?: number; bgColor?: BltPixel };
+  };
   children: UefiElement[];
 };

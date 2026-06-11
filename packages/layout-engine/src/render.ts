@@ -54,135 +54,129 @@ const renderMarginBorderPadding = (
   );
 };
 
-const renderBox = (layout: LayoutRoot | LayoutElement): void => {
-  if (DEBUG) {
-    const { dimensions, position } = layout;
-    println(`${layout.type}: ${JSON.stringify({ dimensions, position })}\n`);
-  } else {
-    renderMarginBorderPadding(layout);
-    // content rectangle
-    refiGraphics.drawRectangle(
-      layout.component.props.style?.bgColor ?? { r: 0, g: 0, b: 0, a: 0 },
-      layout.position,
-      {
-        width: layout.dimensions.width,
-        height: layout.dimensions.height,
-      },
-    );
-  }
-};
+// const renderBox = (layout: LayoutRoot | LayoutElement): void => {
+//   if (DEBUG) {
+//     const { dimensions, position } = layout;
+//     println(`${layout.type}: ${JSON.stringify({ dimensions, position })}\n`);
+//   } else {
+//     renderMarginBorderPadding(layout);
+//     // content rectangle
+//     refiGraphics.drawRectangle(
+//       layout.component.props.style?.bgColor ?? { r: 0, g: 0, b: 0, a: 0 },
+//       layout.position,
+//       {
+//         width: layout.dimensions.width,
+//         height: layout.dimensions.height,
+//       },
+//     );
+//   }
+// };
 
-const renderInput = (item: LayoutItem & { component: Input }) => {
-  if (DEBUG) {
-    const { dimensions, position, component } = item;
-    println(
-      `${item.type}: ${JSON.stringify({
-        dimensions,
-        position,
-        text: component.props.value,
-      })}\n`,
-    );
-  } else {
-    refiGraphics.drawText(
-      item.component.props.value,
-      {
-        BackgroundColor: item.component.props.style?.bgColor ?? {
-          r: 255,
-          g: 255,
-          b: 255,
-          a: 255,
-        },
-        ForegroundColor: { r: 255, g: 0, b: 0, a: 0 },
-        FontInfoMask: [EfiFontInfoMask.EfiFontInfoSysFont],
-        FontInfo: {
-          fontStyle: EfiHiiFontStyle.EfiHiiFontStyleNormal,
-          fontSize: 16,
-          FontName: '',
-        },
-      },
-      {
-        x:
-          item.position.x +
-          item.dimensions.margin +
-          item.dimensions.border +
-          item.dimensions.padding,
-        y:
-          item.position.y +
-          item.dimensions.margin +
-          item.dimensions.border +
-          item.dimensions.padding,
-      },
-    );
-  }
-};
-const renderText = (item: LayoutItem & { component: Text }) => {
-  if (DEBUG) {
-    const { dimensions, position, component } = item;
-    println(
-      `${item.type}: ${JSON.stringify({
-        dimensions,
-        position,
-        text: component.props.text,
-      })}\n`,
-    );
-  } else {
-    refiGraphics.drawText(
-      item.component.props.text,
-      {
-        BackgroundColor: item.component.props.style?.bgColor ?? {
-          r: 0,
-          g: 0,
-          b: 0,
-          a: 0,
-        },
-        ForegroundColor: { r: 255, g: 255, b: 255, a: 255 },
-        FontInfoMask: [EfiFontInfoMask.EfiFontInfoSysFont],
-        FontInfo: {
-          fontStyle: EfiHiiFontStyle.EfiHiiFontStyleNormal,
-          fontSize: 16,
-          FontName: '',
-        },
-      },
-      {
-        x:
-          item.position.x +
-          item.dimensions.margin +
-          item.dimensions.border +
-          item.dimensions.padding,
-        y:
-          item.position.y +
-          item.dimensions.margin +
-          item.dimensions.border +
-          item.dimensions.padding,
-      },
-    );
-  }
-};
+// const renderInput = (item: LayoutItem & { component: Input }) => {
+//   if (DEBUG) {
+//     const { dimensions, position, component } = item;
+//     println(
+//       `${item.type}: ${JSON.stringify({
+//         dimensions,
+//         position,
+//         text: component.props.value,
+//       })}\n`,
+//     );
+//   } else {
+//     refiGraphics.drawText(
+//       item.component.props.value,
+//       {
+//         BackgroundColor: item.component.props.style?.bgColor ?? {
+//           r: 255,
+//           g: 255,
+//           b: 255,
+//           a: 255,
+//         },
+//         ForegroundColor: { r: 255, g: 0, b: 0, a: 0 },
+//         FontInfoMask: [EfiFontInfoMask.EfiFontInfoSysFont],
+//         FontInfo: {
+//           fontStyle: EfiHiiFontStyle.EfiHiiFontStyleNormal,
+//           fontSize: 16,
+//           FontName: '',
+//         },
+//       },
+//       {
+//         x:
+//           item.position.x +
+//           item.dimensions.margin +
+//           item.dimensions.border +
+//           item.dimensions.padding,
+//         y:
+//           item.position.y +
+//           item.dimensions.margin +
+//           item.dimensions.border +
+//           item.dimensions.padding,
+//       },
+//     );
+//   }
+// };
+// const renderText = (item: LayoutItem & { component: Text }) => {
+//   if (DEBUG) {
+//     const { dimensions, position, component } = item;
+//     println(
+//       `${item.type}: ${JSON.stringify({
+//         dimensions,
+//         position,
+//         text: component.props.text,
+//       })}\n`,
+//     );
+//   } else {
+//     refiGraphics.drawText(
+//       item.component.props.text,
+//       {
+//         BackgroundColor: item.component.props.style?.bgColor ?? {
+//           r: 0,
+//           g: 0,
+//           b: 0,
+//           a: 0,
+//         },
+//         ForegroundColor: { r: 255, g: 255, b: 255, a: 255 },
+//         FontInfoMask: [EfiFontInfoMask.EfiFontInfoSysFont],
+//         FontInfo: {
+//           fontStyle: EfiHiiFontStyle.EfiHiiFontStyleNormal,
+//           fontSize: 16,
+//           FontName: '',
+//         },
+//       },
+//       {
+//         x:
+//           item.position.x +
+//           item.dimensions.margin +
+//           item.dimensions.border +
+//           item.dimensions.padding,
+//         y:
+//           item.position.y +
+//           item.dimensions.margin +
+//           item.dimensions.border +
+//           item.dimensions.padding,
+//       },
+//     );
+//   }
+// };
 
 export const render = (root: RootElement): void => {
-  if (DEBUG) {
-    efi.SystemTable.ConOut.ClearScreen();
-  }
-
+  // const layoutCalcStart = performance.now();
   const [layoutRoot, layout] = calculateRoot(root);
+  // const layoutCalcEnd = performance.now();
+  // console.log(`Layout calc (ms): ${layoutCalcEnd - layoutCalcStart}`);
   //renderBox(layout, { x: 0, y: 0 });
-  refiGraphics.clearFrame();
-  renderBox(layoutRoot);
-  layout.layers.forEach((layer) => {
-    layer.forEach((elm) => {
-      match(elm, 'type', {
-        container: (container) => {
-          renderBox(container);
-        },
-        item: (item) => {
-          renderMarginBorderPadding(item);
-          match(item.component, 'type', {
-            input: () => renderInput(item as LayoutItem & { component: Input }),
-            text: () => renderText(item as LayoutItem & { component: Text }),
-          });
-        },
-      });
-    });
-  });
-  refiGraphics.commitFrame();
+  // const registerElementsStart = performance.now();
+  refi.registerElements([
+    [
+      {
+        type: layoutRoot.type,
+        children: layoutRoot.children,
+        component: { ...layoutRoot.component, __id: 0 },
+        containerOptions: layoutRoot.containerOptions,
+        dimensions: layoutRoot.dimensions,
+        position: layoutRoot.position,
+      } as LayoutRoot & { component: { __id: number } },
+    ],
+    ...layout.layers,
+  ]);
 };

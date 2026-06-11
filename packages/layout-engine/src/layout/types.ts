@@ -35,7 +35,7 @@ export type LayoutContainer = LayoutElmBase & {
   children: LayoutElement[];
   component: Pick<
     Extract<UefiElement, { children: UefiElement[] }>,
-    'props' | 'type'
+    'props' | 'type' | '__id'
   >;
 };
 
