@@ -25,7 +25,7 @@ const listeners: SimplePointerListener[] = [];
 const registerListener = (fb: SimplePointerListener) => {
   listeners.push(fb);
 };
-refiInput.addPointerEvent({ id: '' }, (event) => {
+refiInput.addPointerListener({ id: 0 }, (event) => {
   if (event.type === 'simple') {
     pointer.leftButton = event.leftButton;
     pointer.rightButton = event.rightButton;

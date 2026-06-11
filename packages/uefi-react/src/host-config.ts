@@ -75,7 +75,7 @@ export const reconciler = ReactReconciler<
         const id = refi.createId();
         refi.setFocused(id);
         if ('onKeyPress' in props) {
-          refiInput.addKbEvent({ id }, (event) => {
+          refiInput.addKeyboardListener({ id }, (event) => {
             props.onKeyPress?.(refiKeyDataToKeyEvent(event));
           });
         }
