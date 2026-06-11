@@ -11,12 +11,13 @@ export const createRoot = (options: {
   bgColor?: BltPixel;
 }) => {
   const container: RootElement = {
+    __id: 0,
     type: 'root',
     props: {
       style: {
         height: screen.verticalResolution,
         width: screen.horizontalResolution,
-        bgColor: { r: 5, g: 6, b: 22, a: 255 },
+        bgColor: { r: 96, g: 100, b: 135, a: 255 },
       },
     },
     children: [],
