@@ -1,6 +1,8 @@
 # refi
 A react platform for UEFI.
 
+[refi.webm](https://github.com/user-attachments/assets/f482659a-1fd9-4e43-9306-55bfb1ca9d84)
+
 ## About
 This project is built on top of Promethee. The particular fork this project uses can be found here https://codeberg.org/laine-hallot/promethee and the original upstream Promethee repo is over here https://codeberg.org/smnx/promethee
 
