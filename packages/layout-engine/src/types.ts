@@ -7,6 +7,7 @@ export type Style = {
   padding?: number;
   margin?: number;
   border?: number;
+  borderColor?: BltPixel;
 };
 
 export type BaseProps = {

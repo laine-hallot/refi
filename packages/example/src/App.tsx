@@ -65,7 +65,7 @@ export function App() {
   }, []);
 
   return (
-    <box style={{ gap: 8, orientation: "column", alignItems: "start", padding: 24, border: 2 }}>
+    <box style={{ gap: 8, orientation: "column", alignItems: "start", padding: 24 }}>
       <text
         text="Hiiiiiiiiiiiii"
       />
@@ -90,6 +90,9 @@ export function App() {
         </box>
       </box>
       <text style={{ border: 1, margin: 8, padding: 16 }} text="I have margins borders and padding" />
+      <box style={{ orientation: "row", border: 2, borderColor: { r: 166, g: 141, b: 205, a: 255 } }}>
+        <text text="Colored borders" />
+      </box>
       <box style={{ orientation: "row" }}>
         <text text="Unfocused input: " />
         <TextInput />
